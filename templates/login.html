@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Face Analysis AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    <div class="section section-dark" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="form-container" data-aos="fade-up">
+            <div class="section-header" style="margin-bottom: 40px;">
+                <div class="header-badge">SIGN IN</div>
+                <h2 class="main-title" style="font-size: 2.5rem;">Welcome Back</h2>
+                <p class="subtitle">Sign in to access your Face Analysis AI dashboard</p>
+            </div>
+            
+            <div id="alert-container"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
+                        <span id="loginBtnText">Sign In</span>
+                        <span id="loginBtnSpinner" class="spinner" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="text-center" style="margin-top: 20px;">
+                    <a href="{{ url_for('forgot_password') }}" style="color: #00d4ff; text-decoration: none; font-size: 0.9rem;">
+                        Forgot your password?
+                    </a>
+                </div>
+                
+                <div class="text-center" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">
+                        Don't have an account?
+                    </p>
+                    <a href="{{ url_for('signup') }}" class="btn btn-secondary">
+                        Create Account
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Login form handling
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.querySelector('button[type="submit"]');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginBtnSpinner = document.getElementById('loginBtnSpinner');
+            const alertContainer = document.getElementById('alert-container');
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loginBtnSpinner.style.display = 'inline-block';
+            
+            // Clear previous alerts
+            alertContainer.innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success - redirect to dashboard
+                    window.location.href = '/dashboard';
+                } else {
+                    // Show error message
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-error">
+                            ${data.error || 'Login failed. Please try again.'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        Network error. Please check your connection and try again.
+                    </div>
+                `;
+            } finally {
+                // Reset button state
+                loginBtn.disabled = false;
+                loginBtnText.style.display = 'inline';
+                loginBtnSpinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

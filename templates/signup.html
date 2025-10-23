@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Face Analysis AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    <div class="section section-dark" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="form-container" data-aos="fade-up">
+            <div class="section-header" style="margin-bottom: 40px;">
+                <div class="header-badge">SIGN UP</div>
+                <h2 class="main-title" style="font-size: 2.5rem;">Create Account</h2>
+                <p class="subtitle">Join Face Analysis AI and start analyzing faces with advanced AI technology</p>
+            </div>
+            
+            <div id="alert-container"></div>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Create a strong password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
+                </div>
+                
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
+                        <span id="signupBtnText">Create Account</span>
+                        <span id="signupBtnSpinner" class="spinner" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="text-center" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">
+                        Already have an account?
+                    </p>
+                    <a href="{{ url_for('login') }}" class="btn btn-secondary">
+                        Sign In
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Signup form handling
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('full_name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const signupBtn = document.querySelector('button[type="submit"]');
+            const signupBtnText = document.getElementById('signupBtnText');
+            const signupBtnSpinner = document.getElementById('signupBtnSpinner');
+            const alertContainer = document.getElementById('alert-container');
+            
+            // Clear previous alerts
+            alertContainer.innerHTML = '';
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        Passwords do not match. Please try again.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Validate password strength
+            if (password.length < 6) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        Password must be at least 6 characters long.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Show loading state
+            signupBtn.disabled = true;
+            signupBtnText.style.display = 'none';
+            signupBtnSpinner.style.display = 'inline-block';
+            
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName: fullName,
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success - show success message and redirect
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-success">
+                            Account created successfully! Redirecting to login...
+                        </div>
+                    `;
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    // Show error message
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-error">
+                            ${data.error || 'Signup failed. Please try again.'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        Network error. Please check your connection and try again.
+                    </div>
+                `;
+            } finally {
+                // Reset button state
+                signupBtn.disabled = false;
+                signupBtnText.style.display = 'inline';
+                signupBtnSpinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">PROFILE</div>
+                <h2 class="main-title">Edit Profile</h2>
+                <p class="subtitle">Update your account information</p>
+            </div>
+            
+            <div class="card" style="max-width: 600px; margin: 0 auto;" data-aos="slide-up">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="full_name">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="account_type">Account Type</label>
+                        <input type="text" id="account_type" value="{{ user.role.title() }}" disabled>
+                        <small>Account type cannot be changed</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="member_since">Member Since</label>
+                        <input type="text" id="member_since" value="{{ user.created_at.split('T')[0] if 'T' in user.created_at else user.created_at }}" disabled>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                        <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+                
+                <div id="message" class="message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                full_name: document.getElementById('full_name').value,
+                email: document.getElementById('email').value
+            };
+            
+            try {
+                const response = await fetch('/api/update-profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                const messageDiv = document.getElementById('message');
+                
+                if (result.success) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = result.message;
+                    messageDiv.style.display = 'block';
+                    
+                    // Redirect to dashboard after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/user-dashboard';
+                    }, 2000);
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = result.error;
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                const messageDiv = document.getElementById('message');
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'An error occurred. Please try again.';
+                messageDiv.style.display = 'block';
+            }
+        });
+    </script>
+    
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        
+        .form-group input:disabled {
+            background: #0d0d0d;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .message.success {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        
+        .message.error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+    </style>
+</body>
+</html> 

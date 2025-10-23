@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Face Registration - FaceAI</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .user-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .user-info h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .user-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #333;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .camera-container {
+            width: 100%;
+            max-width: 640px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        #cameraFeed, #capturedImage {
+            width: 100%;
+            height: 480px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            object-fit: cover;
+        }
+        
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            
+            .camera-container {
+                height: auto;
+            }
+            
+            #cameraFeed, #capturedImage {
+                height: 360px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin" class="back-link">← Back to Admin Panel</a>
+        
+        <div class="card">
+            <div class="card-header">
+                Register Face for User
+            </div>
+            <div class="card-body">
+                <div class="user-info">
+                    <h3>User Information</h3>
+                    <div class="user-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Name:</div>
+                            <div class="detail-value">{{ target_user.full_name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Email:</div>
+                            <div class="detail-value">{{ target_user.email }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Role:</div>
+                            <div class="detail-value">{{ target_user.role.title() }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="faceRegistrationForm">
+                    <input type="hidden" id="userId" value="{{ target_user.id }}">
+                    
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" name="age" required min="1" max="120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact">Contact Number *</label>
+                        <input type="text" id="contact" name="contact" required>
+                    </div>
+                    
+                    <div class="camera-container">
+                        <video id="cameraFeed" autoplay style="display: none;"></video>
+                        <img id="capturedImage" src="{{ url_for('static', filename='images/Face Detection & Analysis.png') }}" alt="Captured image" style="display: block;">
+                    </div>
+                    
+                    <div class="camera-controls">
+                        <button type="button" id="startCamera" class="btn">Start Camera</button>
+                        <button type="button" id="captureImage" class="btn" disabled>Capture Image</button>
+                        <button type="submit" id="registerFace" class="btn" disabled>Register Face</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const startCameraBtn = document.getElementById('startCamera');
+        const captureImageBtn = document.getElementById('captureImage');
+        const registerFaceBtn = document.getElementById('registerFace');
+        const cameraFeed = document.getElementById('cameraFeed');
+        const capturedImage = document.getElementById('capturedImage');
+        const form = document.getElementById('faceRegistrationForm');
+        
+        // Variables
+        let stream = null;
+        let imageData = null;
+        
+        // Start camera
+        startCameraBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cameraFeed.srcObject = stream;
+                cameraFeed.style.display = 'block';
+                capturedImage.style.display = 'none';
+                startCameraBtn.textContent = 'Restart Camera';
+                captureImageBtn.disabled = false;
+                registerFaceBtn.disabled = true;
+            } catch (err) {
+                Swal.fire({
+                    title: 'Camera Error',
+                    text: 'Could not access camera: ' + err.message,
+                    icon: 'error'
+                });
+            }
+        });
+        
+        // Capture image
+        captureImageBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+            canvas.getContext('2d').drawImage(cameraFeed, 0, 0);
+            imageData = canvas.toDataURL('image/jpeg');
+            
+            capturedImage.src = imageData;
+            capturedImage.style.display = 'block';
+            cameraFeed.style.display = 'none';
+            
+            registerFaceBtn.disabled = false;
+        });
+        
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!imageData) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please capture an image first',
+                    icon: 'error'
+                });
+                return;
+            }
+            
+            const formData = {
+                user_id: document.getElementById('userId').value,
+                age: document.getElementById('age').value,
+                contact: document.getElementById('contact').value,
+                image: imageData
+            };
+            
+            try {
+                registerFaceBtn.disabled = true;
+                registerFaceBtn.textContent = 'Processing...';
+                
+                const response = await fetch('/api/admin/register-face', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: result.message,
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = '/admin';
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: result.error || 'Failed to register face',
+                        icon: 'error'
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Network error occurred',
+                    icon: 'error'
+                });
+            } finally {
+                registerFaceBtn.disabled = false;
+                registerFaceBtn.textContent = 'Register Face';
+            }
+        });
+        
+        // Clean up when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html> 

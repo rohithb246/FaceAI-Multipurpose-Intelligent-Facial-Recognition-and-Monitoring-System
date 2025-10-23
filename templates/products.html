@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <!-- Hero Section -->
+    <div class="section section-gradient" style="background-image: url('{{ url_for('static', filename='images/detection home.jpg') }}'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.7);"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container" style="position: relative; z-index: 2;">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">PRODUCTS</div>
+                <h2 class="main-title">Our Products</h2>
+                <p class="subtitle">Comprehensive AI solutions designed for developers, businesses, and enterprises</p>
+            </div>
+            </div>
+            </div>
+    
+    <!-- Products Section -->
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="grid grid-3">
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🔧</div>
+                        <h3>FaceAI SDK</h3>
+                        <p>Complete software development kit for integrating facial analysis into your applications. Includes pre-trained models, APIs, and comprehensive documentation.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Multi-Platform</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <span style="color: #00d4ff; font-size: 0.9rem;">📱 iOS</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🤖 Android</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">💻 Web</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">☁️</div>
+                        <h3>FaceAI Cloud API</h3>
+                        <p>Cloud-based facial analysis service with RESTful APIs. Process images and videos in the cloud with enterprise-grade security and scalability.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">99.9% Uptime</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <span style="color: #00d4ff; font-size: 0.9rem;">⚡ Fast</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🔒 Secure</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">📈 Scalable</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🏢</div>
+                        <h3>FaceAI Enterprise</h3>
+                        <p>Enterprise-grade solution with advanced features, custom models, dedicated support, and on-premise deployment options for large organizations.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Enterprise</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🎯 Custom</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🛡️ On-Premise</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">📞 Support</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="400">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🚗</div>
+                        <h3>Driver Safety Suite</h3>
+                        <p>Specialized product for automotive safety with driver monitoring, drowsiness detection, and distraction alerts for fleet management and personal vehicles.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Real-time</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <span style="color: #00d4ff; font-size: 0.9rem;">😴 Drowsiness</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">📱 Distraction</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🚨 Alerts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="500">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">📊</div>
+                        <h3>Analytics Platform</h3>
+                        <p>Comprehensive analytics and reporting platform for tracking facial analysis metrics, user engagement, and performance insights across your applications.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Live Analytics</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <span style="color: #00d4ff; font-size: 0.9rem;">📈 Reports</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🎯 Insights</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">📊 Metrics</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="600">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🎮</div>
+                        <h3>Gaming Integration</h3>
+                        <p>Specialized SDK for gaming applications with emotion-based gameplay, player identification, and interactive facial expressions for immersive experiences.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Low Latency</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🎯 Emotions</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">👤 Identity</span>
+                            <span style="color: #00d4ff; font-size: 0.9rem;">🎮 Interactive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="card" style="margin-top: 60px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 30px; text-align: center;">Product Features</h3>
+                <div class="grid grid-2" style="gap: 40px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🚀 High Performance</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Optimized for speed with sub-100ms processing times and 99.9% accuracy across all supported platforms and devices.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🔒 Privacy & Security</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            End-to-end encryption, GDPR compliance, and on-device processing options to ensure your data remains secure and private.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🌍 Cross-Platform</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Support for iOS, Android, Web, Windows, macOS, and Linux with consistent APIs and performance across all platforms.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🛠️ Easy Integration</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Simple APIs, comprehensive documentation, and SDKs for multiple programming languages to get you up and running quickly.
+                        </p>
+            </div>
+        </div>
+            </div>
+            
+            <!-- Pricing Tiers -->
+            <div class="card" style="margin-top: 40px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 30px; text-align: center;">Pricing Tiers</h3>
+                <div class="grid grid-3" style="gap: 30px;">
+                    <div style="text-align: center; padding: 20px; border: 1px solid #333; border-radius: 15px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">Starter</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); font-size: 0.9rem;">Perfect for developers and small projects</p>
+                        <div style="margin-top: 15px;">
+                            <span style="color: #fff; font-size: 1.2rem; font-weight: bold;">Free</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 20px; border: 1px solid #00d4ff; border-radius: 15px; background: rgba(0, 212, 255, 0.05);">
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">Professional</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); font-size: 0.9rem;">Ideal for growing businesses</p>
+                        <div style="margin-top: 15px;">
+                            <span style="color: #fff; font-size: 1.2rem; font-weight: bold;">$29/month</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 20px; border: 1px solid #333; border-radius: 15px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">Enterprise</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); font-size: 0.9rem;">For large organizations</p>
+                        <div style="margin-top: 15px;">
+                            <span style="color: #fff; font-size: 1.2rem; font-weight: bold;">Custom</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="text-center" style="margin-top: 60px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 20px;">Ready to Choose Your Product?</h3>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">
+                    Start with our free tier or contact us for enterprise solutions
+                </p>
+                <a href="{{ url_for('face_analysis') }}" class="btn btn-primary btn-large">
+                    Try Free Demo
+                </a>
+                <a href="{{ url_for('contact') }}" class="btn btn-secondary btn-large" style="margin-left: 15px;">
+                    Get Pricing
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('usecases') }}">Use Cases</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+            <div class="footer-legal">
+                <a href="{{ url_for('terms') }}">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+</html> 

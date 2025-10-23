@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Analysis Demo - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">DEMO</div>
+                <h2 class="main-title">Face Analysis Demo</h2>
+                <p class="subtitle">Experience our enhanced face detection technology with improved training for age and emotion detection</p>
+            </div>
+            
+            <div class="card" style="max-width: 800px; margin: 0 auto;" data-aos="fade-up">
+                <div class="text-center" style="margin-bottom: 30px;">
+                    <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+            Use your camera to analyze age, gender, and emotions with higher accuracy and confidence scores.
+        </p>
+                </div>
+                
+                <div class="text-center" style="margin-bottom: 30px;">
+                    <video id="video" width="400" height="300" autoplay style="border-radius: 15px; border: 2px solid #333; margin-bottom: 20px;"></video>
+                    <div style="margin-bottom: 20px;">
+                        <button id="captureBtn" class="btn btn-primary" style="margin-right: 10px;">
+                            📸 Capture & Analyze
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary" onclick="clearResults()">
+                            🔄 Clear & Restart
+                        </button>
+                    </div>
+                    <canvas id="resultCanvas" width="400" height="300" style="display:none; border-radius: 15px; border: 2px solid #333;"></canvas>
+                </div>
+                
+        <div class="results" id="results"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+const video = document.getElementById('video');
+const canvas = document.getElementById('resultCanvas');
+const resultsDiv = document.getElementById('results');
+const captureBtn = document.getElementById('captureBtn');
+
+// Start webcam
+navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+    video.srcObject = stream;
+});
+
+captureBtn.onclick = function() {
+    // Clear canvas
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw video frame to canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Convert canvas to data URL
+    const dataUrl = canvas.toDataURL('image/jpeg');
+            resultsDiv.innerHTML = '<div class="spinner"></div><p style="color: #00d4ff; margin-top: 10px;">Analyzing...</p>';
+            
+    // Stop webcam after capture
+    if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+    }
+            
+            // Show canvas
+            canvas.style.display = 'block';
+            video.style.display = 'none';
+            
+            // Send to server for analysis
+    fetch('/analyze', {
+        method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image: dataUrl
+                })
+            })
+            .then(response => response.json())
+    .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                resultsDiv.innerHTML = '<p style="color: #ff3b30;">Error analyzing image. Please try again.</p>';
+            });
+        };
+
+        function displayResults(data) {
+            let html = '<div class="text-center">';
+            html += '<h3 style="color: #00d4ff; margin-bottom: 20px;">Analysis Results</h3>';
+            
+            if (data.age) {
+                html += `<div style="margin-bottom: 15px;">
+                    <span style="color: #00d4ff; font-weight: 600;">Age:</span> 
+                    <span style="color: #fff; font-size: 1.2em; font-weight: 600;">${data.age} years</span>
+                </div>`;
+            }
+            
+            if (data.gender) {
+                html += `<div style="margin-bottom: 15px;">
+                    <span style="color: #00d4ff; font-weight: 600;">Gender:</span> 
+                    <span style="color: #fff; font-size: 1.2em; font-weight: 600;">${data.gender}</span>
+                </div>`;
+            }
+            
+            if (data.emotion_breakdown) {
+                html += '<div style="margin-top: 20px;">';
+                html += '<h4 style="color: #00d4ff; margin-bottom: 15px;">Emotion Analysis</h4>';
+                html += '<div style="max-width: 400px; margin: 0 auto;">';
+                
+                Object.entries(data.emotion_breakdown).forEach(([emotion, confidence]) => {
+                    const percentage = Math.round(confidence * 100);
+                    html += `<div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #fff; font-weight: 600;">${emotion}</span>
+                            <span style="color: #00d4ff;">${percentage}%</span>
+        </div>
+                        <div style="background: #333; border-radius: 10px; height: 8px; overflow: hidden;">
+                            <div style="background: #00d4ff; height: 100%; width: ${percentage}%; border-radius: 10px; transition: width 0.5s ease;"></div>
+                </div>
+            </div>`;
+                });
+                
+                html += '</div></div>';
+            }
+            
+            // Also show dominant emotion if available
+            if (data.emotion && data.emotion !== 'N/A') {
+                html += `<div style="margin-top: 15px;">
+                    <span style="color: #00d4ff; font-weight: 600;">Dominant Emotion:</span> 
+                    <span style="color: #fff; font-size: 1.2em; font-weight: 600;">${data.emotion}</span>
+                </div>`;
+            }
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+function clearResults() {
+    resultsDiv.innerHTML = '';
+    canvas.style.display = 'none';
+            video.style.display = 'block';
+    
+    // Restart webcam
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        video.srcObject = stream;
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <!-- Hero Section -->
+    <div class="section section-gradient" style="background-image: url('{{ url_for('static', filename='images/detection home.jpg') }}'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.7);"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container" style="position: relative; z-index: 2;">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">SERVICES</div>
+                <h2 class="main-title">Our Services</h2>
+                <p class="subtitle">Professional AI-powered face analysis solutions for your business needs</p>
+            </div>
+        </div>
+        </div>
+    
+    <!-- Services Section -->
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="grid grid-3">
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🎯</div>
+                        <h3>Face Detection & Analysis</h3>
+                        <p>Real-time detection and analysis of age, gender, and emotion for applications in security, retail, and more. Our advanced AI algorithms provide accurate results in milliseconds.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">99.9% Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🔐</div>
+                        <h3>Face Recognition</h3>
+                        <p>Accurate identification and verification of individuals using advanced facial recognition technology. Perfect for access control, security systems, and user authentication.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">99% Precision</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">😊</div>
+                        <h3>Emotion Analysis</h3>
+                        <p>Comprehensive emotion detection across 7 core expressions. Understand customer sentiment, enhance user experience, and gain valuable insights from facial expressions.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">7 Emotions</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="400">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🚗</div>
+                        <h3>Driver Monitoring</h3>
+                        <p>Advanced driver safety system with drowsiness and distraction detection. Monitor driver alertness in real-time to prevent accidents and improve road safety.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Real-time</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="500">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">📊</div>
+                        <h3>Analytics Dashboard</h3>
+                        <p>Comprehensive analytics and reporting tools to track usage, performance metrics, and insights. Monitor your AI system's performance and optimize results.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Live Data</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="600">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🔧</div>
+                        <h3>API Integration</h3>
+                        <p>Easy-to-use APIs and SDKs for seamless integration into your existing applications. Support for multiple programming languages and platforms.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Multi-Platform</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="card" style="margin-top: 60px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 30px; text-align: center;">Why Choose Our Services?</h3>
+                <div class="grid grid-2" style="gap: 40px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">⚡ High Performance</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Our AI models are optimized for speed and accuracy, processing facial data in milliseconds while maintaining 99.9% accuracy across all analysis types.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🔒 Privacy First</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            We prioritize data security and privacy. All processing can be done on-device, and no personal data is stored without explicit consent.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🌍 Scalable Solutions</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            From individual developers to enterprise solutions, our services scale to meet your needs with flexible pricing and deployment options.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">🛠️ Easy Integration</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Simple APIs and comprehensive documentation make integration quick and straightforward, regardless of your technical expertise.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="text-center" style="margin-top: 60px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 20px;">Ready to Get Started?</h3>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">
+                    Choose the service that fits your needs and start analyzing faces with AI
+                </p>
+                <a href="{{ url_for('face_analysis') }}" class="btn btn-primary btn-large">
+                    Try Demo
+                </a>
+                <a href="{{ url_for('contact') }}" class="btn btn-secondary btn-large" style="margin-left: 15px;">
+                    Contact Sales
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('usecases') }}">Use Cases</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+            <div class="footer-legal">
+                <a href="{{ url_for('terms') }}">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+</html> 

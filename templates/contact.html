@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <!-- Hero Section -->
+    <div class="section section-gradient" style="background-image: url('{{ url_for('static', filename='images/detection home.jpg') }}'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.7);"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container" style="position: relative; z-index: 2;">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">CONTACT</div>
+                <h2 class="main-title">Get in Touch</h2>
+                <p class="subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Form Section -->
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="grid grid-2" style="gap: 40px;">
+                <!-- Contact Form -->
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px;">Send us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" class="form-control" placeholder="What's this about?" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control" rows="5" placeholder="Tell us more about your inquiry..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group" style="text-align: center;">
+                            <button type="submit" id="submitBtn" class="btn btn-primary btn-large" style="width: 100%;">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px;">Contact Information</h3>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div class="icon" style="font-size: 2rem; margin-right: 15px;">📧</div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 5px;">Email</h4>
+                                <p style="color: rgba(255, 255, 255, 0.8);">support@faceai.com</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div class="icon" style="font-size: 2rem; margin-right: 15px;">📞</div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 5px;">Phone</h4>
+                                <p style="color: rgba(255, 255, 255, 0.8);">+91 8722672056</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div class="icon" style="font-size: 2rem; margin-right: 15px;">📍</div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 5px;">Address</h4>
+                                <p style="color: rgba(255, 255, 255, 0.8);">Yelahanka New Town<br>Bangalore,Karnataka-560064</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center;">
+                            <div class="icon" style="font-size: 2rem; margin-right: 15px;">🕒</div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 5px;">Business Hours</h4>
+                                <p style="color: rgba(255, 255, 255, 0.8);">Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="border-top: 1px solid #333; padding-top: 20px;">
+                        <h4 style="color: #00d4ff; margin-bottom: 15px;">Follow Us</h4>
+                        <div style="display: flex; gap: 15px;">
+                            <a href="#" style="color: #00d4ff; font-size: 1.5rem; text-decoration: none;">📱</a>
+                            <a href="#" style="color: #00d4ff; font-size: 1.5rem; text-decoration: none;">🐦</a>
+                            <a href="#" style="color: #00d4ff; font-size: 1.5rem; text-decoration: none;">💼</a>
+                            <a href="#" style="color: #00d4ff; font-size: 1.5rem; text-decoration: none;">📘</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="card" style="margin-top: 40px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 25px; text-align: center;">Frequently Asked Questions</h3>
+                <div class="grid grid-2" style="gap: 30px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">How accurate is your AI?</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Our AI models achieve 99.9% accuracy in facial analysis tasks through continuous training and optimization.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Is my data secure?</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Yes, we prioritize data security and privacy. All data is encrypted and processed with the highest ethical standards.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Do you offer support?</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            We provide comprehensive support through email, phone, and our knowledge base to help you succeed.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Can I integrate your API?</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Absolutely! We provide easy-to-use APIs and SDKs for seamless integration into your applications.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                subject: document.getElementById('subject').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+            
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Success
+                    alert('Thank you for your message! We will get back to you soon.');
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                } else {
+                    // Error
+                    alert(result.error || 'Failed to send message. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to send message. Please check your connection and try again.');
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+    </script>
+</body>
+</html> 

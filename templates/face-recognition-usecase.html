@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Technology - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <div class="section section-gradient" style="background-image: url('{{ url_for('static', filename='images/Face Recognition.png') }}'); background-size: cover; background-position: center; position: relative;">
+        <div class="overlay" style="background: rgba(10, 10, 10, 0.8); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;"></div>
+        
+        <div class="section-container" style="position: relative; z-index: 2;">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">TECHNOLOGY</div>
+                <h2 class="main-title">Face Recognition Technology</h2>
+                <p class="subtitle">Advanced biometric identification and verification systems</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">FEATURES</div>
+                <h2 class="main-title">Key Features</h2>
+                <p class="subtitle">Discover the powerful capabilities of our face recognition system</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">🔐</div>
+                        <h3>Secure Authentication</h3>
+                        <p>Multi-factor authentication using facial biometrics for enhanced security and access control.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">⚡</div>
+                        <h3>Real-time Processing</h3>
+                        <p>Instant face detection and recognition with high accuracy and minimal latency.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">🎯</div>
+                        <h3>High Accuracy</h3>
+                        <p>Advanced algorithms ensure 99%+ accuracy in face recognition across various conditions.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="400">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">🛡️</div>
+                        <h3>Privacy Protection</h3>
+                        <p>Secure data handling with encryption and compliance with privacy regulations.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="500">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">📱</div>
+                        <h3>Multi-platform</h3>
+                        <p>Compatible with web, mobile, and desktop applications for seamless integration.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="600">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">🔧</div>
+                        <h3>Easy Integration</h3>
+                        <p>Simple API integration with comprehensive documentation and support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section section-gradient">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">DEMO</div>
+                <h2 class="main-title">Try Face Recognition</h2>
+                <p class="subtitle">Experience our advanced face recognition technology firsthand</p>
+            </div>
+            
+            <div class="text-center" data-aos="fade-up">
+                <a href="{{ url_for('face_recognition_page') }}" class="btn btn-primary btn-large">
+                    Start Face Recognition Demo
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('usecases') }}">Use Cases</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+            <div class="footer-legal">
+                <a href="{{ url_for('terms') }}">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+</html>
