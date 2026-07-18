@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Face Analysis Use Cases - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <!-- Hero Section -->
+    <div class="section section-gradient" style="background-image: url('{{ url_for('static', filename='images/detection home.jpg') }}'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.7);"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container" style="position: relative; z-index: 2;">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">USE CASES</div>
+                <h2 class="main-title">AI Face Analysis Use Cases</h2>
+                <p class="subtitle">Explore the power of AI-driven facial analysis for a variety of real-world applications</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Use Cases Section -->
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="grid grid-3">
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🎯</div>
+                        <h3>Face Detection & Analysis</h3>
+                        <p>Analyze age, gender, and emotion from a face image in real time. Perfect for analytics, personalization, and more.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Real-time</span>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="{{ url_for('demo') }}" class="btn btn-primary">Try Face Detection</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🔐</div>
+                        <h3>Face Recognition</h3>
+                        <p>Identify or verify a person using advanced facial recognition technology. Secure, fast, and privacy-focused.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">99% Accuracy</span>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="{{ url_for('face_recognition_page') }}" class="btn btn-primary">Try Face Recognition</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">🚗</div>
+                        <h3>Driver Monitoring AI</h3>
+                        <p>Monitor driver alertness and behavior using facial analysis. Enhance road safety and reduce accidents.</p>
+                        <div style="margin-top: 20px;">
+                            <span class="accuracy-badge">Safety First</span>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="{{ url_for('driver_monitoring') }}" class="btn btn-primary">Try Driver Monitoring</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="text-center" style="margin-top: 60px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 20px;">Try our face detection tool to see Face Analysis AI in action!</h3>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">
+                    Experience the power of AI-driven facial analysis
+                </p>
+                <a href="{{ url_for('demo') }}" class="btn btn-primary btn-large">
+                    Try Demo
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('usecases') }}">Use Cases</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+            <div class="footer-legal">
+                <a href="{{ url_for('terms') }}">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+</html>

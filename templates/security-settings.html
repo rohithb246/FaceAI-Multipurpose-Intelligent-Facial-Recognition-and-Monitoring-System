@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Settings - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">SECURITY</div>
+                <h2 class="main-title">Security Settings</h2>
+                <p class="subtitle">Change your password and security preferences</p>
+            </div>
+            
+            <div class="card" style="max-width: 600px; margin: 0 auto;" data-aos="slide-up">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="current_password">Current Password</label>
+                        <input type="password" id="current_password" name="current_password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input type="password" id="new_password" name="new_password" required>
+                        <small>Password must be at least 8 characters long</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                        <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+                
+                <div id="message" class="message" style="display: none;"></div>
+            </div>
+            
+            <!-- Security Tips -->
+            <div class="card" style="margin-top: 30px;" data-aos="slide-up" data-aos-delay="200">
+                <h3>Security Tips</h3>
+                <ul class="security-tips">
+                    <li>Use a strong password with at least 8 characters</li>
+                    <li>Include a mix of uppercase, lowercase, numbers, and symbols</li>
+                    <li>Never share your password with anyone</li>
+                    <li>Consider using a password manager</li>
+                    <li>Enable two-factor authentication if available</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('new_password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (newPassword.length < 8) {
+                showMessage('Password must be at least 8 characters long', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showMessage('New passwords do not match', 'error');
+                return;
+            }
+            
+            const formData = {
+                current_password: document.getElementById('current_password').value,
+                new_password: newPassword,
+                confirm_password: confirmPassword
+            };
+            
+            try {
+                const response = await fetch('/api/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage(result.message, 'success');
+                    
+                    // Clear form
+                    document.getElementById('changePasswordForm').reset();
+                    
+                    // Redirect to dashboard after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/user-dashboard';
+                    }, 2000);
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('An error occurred. Please try again.', 'error');
+            }
+        });
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            messageDiv.style.display = 'block';
+        }
+    </script>
+    
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .message.success {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        
+        .message.error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+        
+        .security-tips {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .security-tips li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .security-tips li:before {
+            content: "🔒";
+            margin-right: 10px;
+            color: #00d4ff;
+        }
+        
+        .security-tips li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</body>
+</html> 

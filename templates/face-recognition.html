@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .recognition-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            margin-top: 30px;
+        }
+        
+        .camera-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .camera-controls .btn {
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .camera-controls .btn-primary {
+            background: linear-gradient(90deg, #e7ebed 60%, #070707 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(61,174,248,0.18);
+        }
+        
+        .camera-controls .btn-primary:hover {
+            background: linear-gradient(90deg, #00a63f 60%, #3daef8 100%);
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 8px 32px rgba(61,174,248,0.28);
+        }
+        
+        .camera-controls .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .camera-controls .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+        }
+        
+        .result-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .alert {
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        
+        .alert-error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+        
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 212, 255, 0.3);
+            border-top: 4px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .recognition-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .camera-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .camera-controls .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .recognition-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    {% if user %}
+    <div class="user-welcome" style="background: linear-gradient(135deg, #3daef8 0%, #00a63f 100%); color: white; padding: 15px 0; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <h3 style="margin: 0; font-size: 1.2em;">Welcome back, {{ user.full_name }}! 👋</h3>
+            <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 0.95em;">Ready to recognize some faces?</p>
+        </div>
+    </div>
+    {% endif %}
+    
+    <section class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">FACE RECOGNITION</div>
+                <h2 class="main-title">Advanced Face Recognition</h2>
+                <p class="subtitle">Identify or verify individuals using our state-of-the-art facial recognition technology</p>
+            </div>
+            
+            <div class="card" style="max-width: 1000px; margin: 0 auto;" data-aos="fade-up">
+                <div class="text-center" style="margin-bottom: 30px;">
+                    <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6; font-size: 1.1em;">
+                        Use your camera to capture an image and our AI will identify the person or verify their identity against our database.
+                    </p>
+                </div>
+                
+                <div class="recognition-section">
+                    <div class="camera-container">
+                        <div style="position: relative; display: inline-block;">
+                            <video id="cameraFeed" autoplay style="width: 100%; max-width: 640px; height: 480px; border-radius: 15px; border: 2px solid rgba(0, 212, 255, 0.3); object-fit: cover; background: rgba(0, 0, 0, 0.3);"></video>
+                            <canvas id="capturedImage" style="display: none; width: 100%; max-width: 640px; height: 480px; border-radius: 15px; border: 2px solid rgba(0, 212, 255, 0.3); background-color: rgba(0, 0, 0, 0.3);"></canvas>
+                            
+                            <!-- Face Detection Guide Overlay -->
+                            <div id="faceGuide" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 200px; height: 250px; border: 2px dashed rgba(0, 212, 255, 0.6); border-radius: 20px; display: flex; align-items: center; justify-content: center; background: rgba(0, 212, 255, 0.1);">
+                                    <div style="text-align: center; color: rgba(0, 212, 255, 0.8); font-size: 14px; font-weight: 600;">
+                                        👤 Position your face here
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="camera-controls">
+                        <button id="captureBtn" class="btn btn-primary">
+                            📸 Capture & Recognize
+                        </button>
+                        <button id="testDetectionBtn" class="btn btn-secondary" onclick="testFaceDetection()">
+                            🔍 Test Face Detection
+                        </button>
+                        <button id="debugBtn" class="btn btn-secondary" onclick="debugDatabase()">
+                            🔧 Debug Database
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary" onclick="clearRecognition()">
+                            🔄 Clear & Restart
+                        </button>
+                    </div>
+                    
+                    <!-- Face Detection Tips -->
+                    <div style="background: rgba(0, 212, 255, 0.1); border-radius: 15px; padding: 20px; margin-top: 20px; border: 1px solid rgba(0, 212, 255, 0.3);">
+                        <h4 style="color: #00d4ff; margin-bottom: 15px; font-size: 1.1em;">
+                            <i class="fas fa-lightbulb"></i> Tips for Better Face Detection
+                        </h4>
+                        <ul style="color: rgba(255, 255, 255, 0.9); margin: 0; padding-left: 20px; line-height: 1.6;">
+                            <li><strong>Position your face</strong> within the blue guide frame</li>
+                            <li><strong>Ensure good lighting</strong> - avoid shadows on your face</li>
+                            <li><strong>Look directly at the camera</strong> with your full face visible</li>
+                            <li><strong>Stay still</strong> when capturing the image</li>
+                            <li><strong>Keep a distance</strong> of about 1-2 feet from the camera</li>
+                        </ul>
+                    </div>
+                    
+                    <div id="recognitionResult" class="result-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('usecases') }}">Use Cases</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+            <div class="footer-legal">
+                <a href="{{ url_for('terms') }}">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        const video = document.getElementById('cameraFeed');
+        const canvas = document.getElementById('capturedImage');
+        const resultDiv = document.getElementById('recognitionResult');
+        const captureBtn = document.getElementById('captureBtn');
+        const faceGuide = document.getElementById('faceGuide');
+
+        // Enhanced camera setup with better constraints
+        async function startCamera() {
+            try {
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280, min: 640 },
+                        height: { ideal: 720, min: 480 },
+                        facingMode: 'user',
+                        frameRate: { ideal: 30 }
+                    }
+                };
+                
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+                console.log('Camera access granted successfully');
+                
+                // Wait for video to be ready
+                video.onloadedmetadata = () => {
+                    console.log('Video metadata loaded:', video.videoWidth, 'x', video.videoHeight);
+                };
+                
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                resultDiv.innerHTML = '<div class="alert alert-error">Error accessing camera. Please check permissions and try again.</div>';
+            }
+        }
+
+        // Start camera when page loads
+        startCamera();
+
+        captureBtn.onclick = async function() {
+            try {
+                console.log('Starting face recognition process...');
+                
+                // Check if video is ready
+                if (video.videoWidth === 0 || video.videoHeight === 0) {
+                    console.error('Video not ready yet');
+                    resultDiv.innerHTML = '<div class="alert alert-error">Camera not ready. Please wait a moment and try again.</div>';
+                    return;
+                }
+                
+                // Set canvas size to match video dimensions
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                console.log('Video dimensions:', video.videoWidth, 'x', video.videoHeight);
+                
+                // Clear canvas
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw video frame to canvas
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Convert canvas to data URL with higher quality
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+                
+                console.log('Captured image size:', canvas.width, 'x', canvas.height);
+                console.log('Image data length:', dataUrl.length);
+                
+                // Show loading state
+                resultDiv.innerHTML = '<div class="spinner"></div><p style="color: #00d4ff; margin-top: 10px; text-align: center;">Analyzing face...</p>';
+                
+                // Stop webcam after capture
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }
+                
+                // Show canvas
+                canvas.style.display = 'block';
+                video.style.display = 'none';
+                
+                // Hide face guide during capture
+                faceGuide.style.display = 'none';
+                
+                console.log('Sending image to server for recognition...');
+                
+                // Send to server for recognition
+                const response = await fetch('/api/face-recognize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: dataUrl
+                    })
+                });
+                
+                console.log('Server response status:', response.status);
+                
+                const data = await response.json();
+                
+                console.log('Recognition response:', data);
+                
+                if (response.ok) {
+                    displayRecognitionResult(data);
+                } else {
+                    console.error('Server error:', data.error);
+                    
+                    // Provide more helpful error messages
+                    let errorMessage = data.error || 'Recognition failed. Please try again.';
+                    
+                    if (errorMessage.includes('No faces detected')) {
+                        errorMessage = 'No face detected in the image. Please ensure your face is clearly visible and well-lit. Try positioning yourself closer to the camera.';
+                    } else if (errorMessage.includes('No registered faces')) {
+                        errorMessage = 'No registered faces found in the database. Please contact an administrator to register faces.';
+                    }
+                    
+                    resultDiv.innerHTML = `<div class="alert alert-error">${errorMessage}</div>`;
+                }
+            } catch (error) {
+                console.error('Recognition error:', error);
+                resultDiv.innerHTML = '<div class="alert alert-error">Network error. Please check your connection and try again.</div>';
+            }
+        };
+
+        function displayRecognitionResult(data) {
+            console.log('Displaying recognition result:', data);
+            
+            let html = '<div class="text-center">';
+            html += '<h3 style="color: #00d4ff; margin-bottom: 20px; font-size: 1.5em;">Recognition Results</h3>';
+            
+            if (data.recognized) {
+                html += `<div style="margin-bottom: 15px;">
+                    <span style="color: #00d4ff; font-weight: 600;">Status:</span> 
+                    <span style="color: #00ff88; font-size: 1.2em; font-weight: 600;">✓ Recognized</span>
+                </div>`;
+                
+                if (data.person) {
+                    html += `<div style="margin-bottom: 15px;">
+                        <span style="color: #00d4ff; font-weight: 600;">Name:</span> 
+                        <span style="color: #fff; font-size: 1.2em; font-weight: 600;">${data.person.name}</span>
+                    </div>`;
+                    
+                    if (data.person.email) {
+                        html += `<div style="margin-bottom: 15px;">
+                            <span style="color: #00d4ff; font-weight: 600;">Email:</span> 
+                            <span style="color: #fff; font-size: 1.1em;">${data.person.email}</span>
+                        </div>`;
+                    }
+                    
+                    if (data.confidence) {
+                        const confidencePercent = Math.round(data.confidence * 100);
+                        html += `<div style="margin-bottom: 15px;">
+                            <span style="color: #00d4ff; font-weight: 600;">Confidence:</span> 
+                            <span style="color: #fff; font-size: 1.2em; font-weight: 600;">${confidencePercent}%</span>
+                        </div>`;
+                    }
+                }
+                
+                // Add stats section
+                html += '<div class="recognition-stats">';
+                html += '<div class="stat-card">';
+                html += '<div class="stat-value">✓</div>';
+                html += '<div class="stat-label">Success</div>';
+                html += '</div>';
+                html += '<div class="stat-card">';
+                html += `<div class="stat-value">${data.confidence ? Math.round(data.confidence * 100) : 'N/A'}%</div>`;
+                html += '<div class="stat-label">Confidence</div>';
+                html += '</div>';
+                html += '<div class="stat-card">';
+                html += '<div class="stat-value">0.1s</div>';
+                html += '<div class="stat-label">Response Time</div>';
+                html += '</div>';
+                html += '</div>';
+            } else {
+                html += `<div style="margin-bottom: 15px;">
+                    <span style="color: #00d4ff; font-weight: 600;">Status:</span> 
+                    <span style="color: #ff6b6b; font-size: 1.2em; font-weight: 600;">✗ Not Recognized</span>
+                </div>`;
+                
+                html += `<div style="margin-bottom: 15px;">
+                    <span style="color: rgba(255, 255, 255, 0.7);">This person is not registered in our database.</span>
+                </div>`;
+                
+                // Add stats section for unrecognized
+                html += '<div class="recognition-stats">';
+                html += '<div class="stat-card">';
+                html += '<div class="stat-value">✗</div>';
+                html += '<div class="stat-label">Not Found</div>';
+                html += '</div>';
+                html += '<div class="stat-card">';
+                html += '<div class="stat-value">0%</div>';
+                html += '<div class="stat-label">Confidence</div>';
+                html += '</div>';
+                html += '<div class="stat-card">';
+                html += '<div class="stat-value">0.1s</div>';
+                html += '<div class="stat-label">Response Time</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+
+        async function testFaceDetection() {
+            try {
+                console.log('Testing face detection...');
+                
+                // Check if video is ready
+                if (video.videoWidth === 0 || video.videoHeight === 0) {
+                    console.error('Video not ready yet');
+                    resultDiv.innerHTML = '<div class="alert alert-error">Camera not ready. Please wait a moment and try again.</div>';
+                    return;
+                }
+                
+                // Set canvas size to match video dimensions
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                console.log('Video dimensions for test:', video.videoWidth, 'x', video.videoHeight);
+                
+                // Clear canvas
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw video frame to canvas
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Convert canvas to data URL
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                
+                console.log('Testing face detection with image size:', canvas.width, 'x', canvas.height);
+                
+                // Show loading state
+                resultDiv.innerHTML = '<div class="spinner"></div><p style="color: #00d4ff; margin-top: 10px; text-align: center;">Testing face detection...</p>';
+                
+                console.log('Sending test request to server...');
+                
+                // Send to test endpoint
+                const response = await fetch('/api/test-face-detection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: dataUrl
+                    })
+                });
+                
+                console.log('Test response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Face detection test response:', data);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="alert alert-success">
+                        <h4 style="color: #00ff88; margin-bottom: 15px;">Face Detection Test Results</h4>
+                        <p><strong style="color: #00d4ff;">Faces Detected:</strong> <span style="color: #fff;">${data.faces_detected}</span></p>
+                        <p><strong style="color: #00d4ff;">Image Size:</strong> <span style="color: #fff;">${data.image_size[1]} x ${data.image_size[0]}</span></p>
+                        <p><strong style="color: #00d4ff;">Message:</strong> <span style="color: #fff;">${data.message}</span></p>
+                    </div>`;
+                } else {
+                    console.error('Test failed:', data.error);
+                    resultDiv.innerHTML = `<div class="alert alert-error">${data.error || 'Face detection test failed.'}</div>`;
+                }
+            } catch (error) {
+                console.error('Face detection test error:', error);
+                resultDiv.innerHTML = '<div class="alert alert-error">Network error during face detection test.</div>';
+            }
+        }
+
+        function clearRecognition() {
+            // Restart camera
+            startCamera();
+            
+            // Clear results
+            resultDiv.innerHTML = '';
+            
+            // Show video, hide canvas
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            
+            // Show face guide
+            faceGuide.style.display = 'flex';
+            
+            console.log('Recognition cleared and camera restarted');
+        }
+
+        async function debugDatabase() {
+            try {
+                console.log('Checking face recognition database...');
+                
+                // Show loading state
+                resultDiv.innerHTML = '<div class="spinner"></div><p style="color: #00d4ff; margin-top: 10px; text-align: center;">Checking database status...</p>';
+                
+                const response = await fetch('/api/debug/face-database', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                console.log('Debug response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Database debug response:', data);
+                
+                if (response.ok) {
+                    let html = '<div class="text-center">';
+                    html += '<h3 style="color: #00d4ff; margin-bottom: 20px; font-size: 1.5em;">Database Status</h3>';
+                    
+                    html += `<div style="margin-bottom: 15px;">
+                        <span style="color: #00d4ff; font-weight: 600;">Total Registered:</span> 
+                        <span style="color: #fff; font-size: 1.2em; font-weight: 600;">${data.total_registered}</span>
+                    </div>`;
+                    
+                    html += `<div style="margin-bottom: 15px;">
+                        <span style="color: #00d4ff; font-weight: 600;">Valid Files:</span> 
+                        <span style="color: #00ff88; font-size: 1.2em; font-weight: 600;">${data.valid_files}</span>
+                    </div>`;
+                    
+                    html += `<div style="margin-bottom: 15px;">
+                        <span style="color: #00d4ff; font-weight: 600;">Missing Files:</span> 
+                        <span style="color: #ff6b6b; font-size: 1.2em; font-weight: 600;">${data.missing_files}</span>
+                    </div>`;
+                    
+                    if (data.people && data.people.length > 0) {
+                        html += '<div style="margin-top: 20px;">';
+                        html += '<h4 style="color: #00d4ff; margin-bottom: 10px;">Registered People:</h4>';
+                        html += '<div style="text-align: left; max-height: 200px; overflow-y: auto; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">';
+                        
+                        data.people.forEach(person => {
+                            html += `<div style="margin-bottom: 8px; padding: 8px; background: rgba(0,212,255,0.1); border-radius: 5px;">
+                                <strong style="color: #00d4ff;">${person.name}</strong> (ID: ${person.user_id})<br>
+                                <small style="color: rgba(255,255,255,0.7);">Age: ${person.age}, Phone: ${person.phone}</small>
+                            </div>`;
+                        });
+                        
+                        html += '</div></div>';
+                    } else {
+                        html += '<div style="margin-top: 20px; color: #ff6b6b;">No registered people found in database.</div>';
+                    }
+                    
+                    html += '</div>';
+                    resultDiv.innerHTML = html;
+                } else {
+                    console.error('Debug failed:', data.error);
+                    resultDiv.innerHTML = `<div class="alert alert-error">${data.error || 'Database debug failed.'}</div>`;
+                }
+            } catch (error) {
+                console.error('Database debug error:', error);
+                resultDiv.innerHTML = '<div class="alert alert-error">Network error during database debug.</div>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Monitoring AI - FaceAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        #videoElement {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .alert-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .alert-text {
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .metrics-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #007bff;
+        }
+        
+        .metric-card.drowsy {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .metric-value.drowsy {
+            color: #dc3545;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .btn-monitoring {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-monitoring:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-active {
+            background: #28a745;
+            animation: blink 1s infinite;
+        }
+        
+        .status-inactive {
+            background: #6c757d;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .instructions h4 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="header">
+                <h1><i class="fas fa-car"></i> Driver Monitoring AI</h1>
+                <p>Real-time drowsiness detection with AI-powered alerts</p>
+            </div>
+            
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="video-container">
+                            <video id="videoElement" autoplay muted></video>
+                            <div class="alert-overlay" id="alertOverlay">
+                                <div class="alert-text">
+                                    <i class="fas fa-exclamation-triangle"></i><br>
+                                    DROWSINESS ALERT!<br>
+                                    <small>Please stay alert!</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="controls">
+                            <button class="btn btn-monitoring" id="startBtn">
+                                <i class="fas fa-play"></i> Start Monitoring
+                            </button>
+                            <button class="btn btn-monitoring btn-danger" id="stopBtn" disabled>
+                                <i class="fas fa-stop"></i> Stop Monitoring
+                            </button>
+                            <button class="btn btn-monitoring btn-success" id="resetBtn">
+                                <i class="fas fa-redo"></i> Reset Counters
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="metrics-container">
+                            <h4><i class="fas fa-chart-line"></i> Real-time Metrics</h4>
+                            
+                            <div class="metric-card" id="statusCard">
+                                <div class="d-flex align-items-center">
+                                    <div class="status-indicator status-inactive" id="statusIndicator"></div>
+                                    <strong>Status: <span id="statusText">Inactive</span></strong>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>EAR (Left Eye)</strong><br>
+                                        <span class="metric-value" id="earLeft">0.00</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>EAR (Right Eye)</strong><br>
+                                        <span class="metric-value" id="earRight">0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Average EAR</strong><br>
+                                        <span class="metric-value" id="earAverage">0.00</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>FPS</strong><br>
+                                        <span class="metric-value" id="fps">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <strong>Total Blinks</strong><br>
+                                <span class="metric-value" id="totalBlinks">0</span>
+                            </div>
+                            
+                            <div class="metric-card" id="drowsyCard">
+                                <strong>Drowsy Counter</strong><br>
+                                <span class="metric-value" id="drowsyCounter">0</span>
+                            </div>
+                            
+                            <div class="metric-card" id="alertCard" style="display: none;">
+                                <strong>Alert Countdown</strong><br>
+                                <span class="metric-value drowsy" id="alertCountdown">0s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h4><i class="fas fa-info-circle"></i> How it works</h4>
+                    <ul>
+                        <li><strong>Eye Aspect Ratio (EAR):</strong> Measures eye openness using facial landmarks</li>
+                        <li><strong>Drowsiness Detection:</strong> Triggers when eyes remain closed for extended periods</li>
+                        <li><strong>Real-time Monitoring:</strong> Continuously analyzes your eye movements</li>
+                        <li><strong>Alert System:</strong> Red screen overlay appears when drowsiness is detected</li>
+                        <li><strong>Safety First:</strong> Always pull over safely if you feel tired while driving</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        class DriverMonitoring {
+            constructor() {
+                this.video = document.getElementById('videoElement');
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.stream = null;
+                this.isMonitoring = false;
+                this.monitoringInterval = null;
+                
+                this.initializeElements();
+                this.bindEvents();
+            }
+            
+            initializeElements() {
+                this.startBtn = document.getElementById('startBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.alertOverlay = document.getElementById('alertOverlay');
+                this.statusIndicator = document.getElementById('statusIndicator');
+                this.statusText = document.getElementById('statusText');
+                
+                // Metric elements
+                this.earLeft = document.getElementById('earLeft');
+                this.earRight = document.getElementById('earRight');
+                this.earAverage = document.getElementById('earAverage');
+                this.fps = document.getElementById('fps');
+                this.totalBlinks = document.getElementById('totalBlinks');
+                this.drowsyCounter = document.getElementById('drowsyCounter');
+                this.alertCountdown = document.getElementById('alertCountdown');
+                this.alertCard = document.getElementById('alertCard');
+                this.drowsyCard = document.getElementById('drowsyCard');
+            }
+            
+            bindEvents() {
+                this.startBtn.addEventListener('click', () => this.startMonitoring());
+                this.stopBtn.addEventListener('click', () => this.stopMonitoring());
+                this.resetBtn.addEventListener('click', () => this.resetCounters());
+            }
+            
+            async startMonitoring() {
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        } 
+                    });
+                    
+                    this.video.srcObject = this.stream;
+                    this.video.play();
+                    
+                    this.isMonitoring = true;
+                    this.updateStatus(true);
+                    this.startBtn.disabled = true;
+                    this.stopBtn.disabled = false;
+                    
+                    // Start processing frames
+                    this.monitoringInterval = setInterval(() => {
+                        this.processFrame();
+                    }, 100); // Process every 100ms
+                    
+                    console.log('Driver monitoring started');
+                    
+                } catch (error) {
+                    console.error('Error starting monitoring:', error);
+                    alert('Error accessing camera. Please make sure camera permissions are granted.');
+                }
+            }
+            
+            stopMonitoring() {
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                    this.stream = null;
+                }
+                
+                this.isMonitoring = false;
+                this.updateStatus(false);
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+                
+                if (this.monitoringInterval) {
+                    clearInterval(this.monitoringInterval);
+                    this.monitoringInterval = null;
+                }
+                
+                this.hideAlert();
+                console.log('Driver monitoring stopped');
+            }
+            
+            updateStatus(active) {
+                if (active) {
+                    this.statusIndicator.className = 'status-indicator status-active';
+                    this.statusText.textContent = 'Active';
+                } else {
+                    this.statusIndicator.className = 'status-indicator status-inactive';
+                    this.statusText.textContent = 'Inactive';
+                }
+            }
+            
+            async processFrame() {
+                if (!this.isMonitoring || this.video.videoWidth === 0 || this.processingFrame) return;
+                this.processingFrame = true;
+                
+                // Set canvas size to match video
+                this.canvas.width = this.video.videoWidth;
+                this.canvas.height = this.video.videoHeight;
+                
+                // Draw video frame to canvas
+                this.ctx.drawImage(this.video, 0, 0);
+                
+                // Get frame data as base64
+                const frameData = this.canvas.toDataURL('image/jpeg', 0.8);
+                
+                try {
+                    const response = await fetch('/api/driver-monitoring', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ frame: frameData })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.updateMetrics(result);
+                        this.handleDrowsinessAlert(result);
+                    } else {
+                        console.error('Processing error:', result.error);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error processing frame:', error);
+                } finally {
+                    this.processingFrame = false;
+                }
+            }
+            
+            updateMetrics(data) {
+                this.earLeft.textContent = data.ear_left.toFixed(2);
+                this.earRight.textContent = data.ear_right.toFixed(2);
+                this.earAverage.textContent = data.ear_average.toFixed(2);
+                this.fps.textContent = data.fps;
+                this.totalBlinks.textContent = data.total_blinks;
+                this.drowsyCounter.textContent = data.drowsy_counter;
+                
+                // Update drowsy card appearance
+                if (data.drowsiness_detected) {
+                    this.drowsyCard.classList.add('drowsy');
+                    this.drowsyCounter.classList.add('drowsy');
+                } else {
+                    this.drowsyCard.classList.remove('drowsy');
+                    this.drowsyCounter.classList.remove('drowsy');
+                }
+            }
+            
+            handleDrowsinessAlert(data) {
+                if (data.is_alert_active) {
+                    this.showAlert(data.alert_countdown);
+                } else {
+                    this.hideAlert();
+                }
+            }
+            
+            showAlert(countdown) {
+                this.alertOverlay.style.display = 'flex';
+                this.alertCountdown.textContent = `Eyes closed: ${countdown}s`;
+                this.alertCard.style.display = 'block';
+            }
+            
+            hideAlert() {
+                this.alertOverlay.style.display = 'none';
+                this.alertCard.style.display = 'none';
+            }
+            
+            async resetCounters() {
+                try {
+                    const response = await fetch('/api/driver-monitoring/reset', {
+                        method: 'POST'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Reset local metrics
+                        this.earLeft.textContent = '0.00';
+                        this.earRight.textContent = '0.00';
+                        this.earAverage.textContent = '0.00';
+                        this.fps.textContent = '0';
+                        this.totalBlinks.textContent = '0';
+                        this.drowsyCounter.textContent = '0';
+                        
+                        this.drowsyCard.classList.remove('drowsy');
+                        this.drowsyCounter.classList.remove('drowsy');
+                        this.hideAlert();
+                        
+                        console.log('Counters reset successfully');
+                    }
+                } catch (error) {
+                    console.error('Error resetting counters:', error);
+                }
+            }
+        }
+        
+        // Initialize driver monitoring when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new DriverMonitoring();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Analysis AI - Enhanced</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <!-- AOS Animate On Scroll CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <style>
+    .explore-btn {
+        display: inline-block;
+        margin-top: 28px;
+        background: linear-gradient(90deg, #3daef8 60%, #00a63f 100%);
+        color: #fff;
+        padding: 15px 40px;
+        border-radius: 30px;
+        font-size: 1.25em;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 18px rgba(61,174,248,0.18);
+        letter-spacing: 1px;
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+        margin-right: 18px;
+    }
+    .explore-btn:hover {
+        background: linear-gradient(90deg, #00a63f 60%, #3daef8 100%);
+        color: #fff;
+        transform: translateY(-3px) scale(1.04);
+        box-shadow: 0 8px 32px rgba(61,174,248,0.28);
+    }
+    .demo-btn {
+        display: inline-block;
+        margin-top: 28px;
+        background: linear-gradient(90deg, #00a63f 60%, #3daef8 100%);
+        color: #fff;
+        padding: 15px 40px;
+        border-radius: 30px;
+        font-size: 1.25em;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 18px rgba(61,174,248,0.18);
+        letter-spacing: 1px;
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+    .demo-btn:hover {
+        background: linear-gradient(90deg, #3daef8 60%, #00a63f 100%);
+        color: #fff;
+        transform: translateY(-3px) scale(1.04);
+        box-shadow: 0 8px 32px rgba(61,174,248,0.28);
+    }
+    .estimation-text {
+        background: #fff;
+        color: #111;
+        border-radius: 12px;
+        padding: 32px 28px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        margin: 0 0 24px 0;
+    }
+    .estimation-text h3 {
+        color: #18183a;
+        font-size: 1.5em;
+        margin-bottom: 12px;
+    }
+    .estimation-text p, .estimation-text ul {
+        color: #222;
+        font-size: 1.08em;
+    }
+    .estimation-img img {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .estimation-img img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+    .estimation-block {
+        transition: transform 0.3s ease;
+    }
+    .estimation-block:hover {
+        transform: translateY(-5px);
+    }
+    .pricing-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .pricing-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(61,174,248,0.15);
+    }
+    .pricing-card.featured {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .pricing-card.featured:hover {
+        transform: translateY(-12px) scale(1.03);
+        box-shadow: 0 15px 50px rgba(61,174,248,0.25);
+    }
+    .pricing-card .explore-btn {
+        transition: all 0.3s ease;
+    }
+    .pricing-card:hover .explore-btn {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(61,174,248,0.3);
+    }
+    .pricing-card ul li {
+        transition: all 0.2s ease;
+        padding: 4px 0;
+    }
+    .pricing-card:hover ul li {
+        transform: translateX(5px);
+        color: #3daef8;
+    }
+    .pricing-card.active-plan {
+        border: 3px solid #3daef8 !important;
+        box-shadow: 0 20px 60px rgba(61,174,248,0.3) !important;
+    }
+    .pricing-card.active-plan .explore-btn {
+        background: linear-gradient(90deg, #00a63f 60%, #3daef8 100%) !important;
+        transform: scale(1.1) !important;
+    }
+    .pricing-card.active-plan h3,
+    .pricing-card.active-plan .price {
+        color: #3daef8 !important;
+    }
+    
+    /* AI Chatbot Styles */
+    #ai-chatbot-btn {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        z-index: 2000;
+        background: linear-gradient(90deg, #3daef8 60%, #00a63f 100%);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 4px 18px rgba(61,174,248,0.18);
+        font-size: 2em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+    
+    #ai-chatbot-btn:hover {
+        background: linear-gradient(90deg, #00a63f 60%, #3daef8 100%);
+    }
+    
+    #ai-chatbot-window {
+        position: fixed;
+        bottom: 100px;
+        right: 32px;
+        width: 340px;
+        max-width: 95vw;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(61,174,248,0.18);
+        z-index: 2001;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    #ai-chatbot-header {
+        background: linear-gradient(90deg, #3daef8 60%, #00a63f 100%);
+        color: #fff;
+        padding: 16px;
+        font-weight: 600;
+        font-size: 1.1em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    #ai-chatbot-close {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.2em;
+        cursor: pointer;
+    }
+    
+    #ai-chatbot-messages {
+        padding: 16px;
+        height: 220px;
+        overflow-y: auto;
+        background: #f7faff;
+        font-size: 1em;
+    }
+    
+    #ai-chatbot-input-area {
+        display: flex;
+        border-top: 1px solid #e6eaf3;
+        background: #fff;
+    }
+    
+    #ai-chatbot-input {
+        flex: 1;
+        border: none;
+        padding: 12px;
+        font-size: 1em;
+        border-radius: 0 0 0 16px;
+        outline: none;
+    }
+    
+    #ai-chatbot-send {
+        background: #3daef8;
+        color: #fff;
+        border: none;
+        padding: 0 18px;
+        font-size: 1.1em;
+        border-radius: 0 0 16px 0;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    #ai-chatbot-send:hover {
+        background: #00a63f;
+    }
+    
+    .ai-chatbot-msg {
+        margin-bottom: 10px;
+        display: flex;
+    }
+    
+    .ai-chatbot-msg.user {
+        justify-content: flex-end;
+    }
+    
+    .ai-chatbot-msg.bot {
+        justify-content: flex-start;
+    }
+    
+    .ai-chatbot-bubble {
+        max-width: 80%;
+        padding: 10px 16px;
+        border-radius: 16px;
+        background: #3daef8;
+        color: #fff;
+        margin-bottom: 2px;
+        font-size: 1em;
+    }
+    
+    .ai-chatbot-msg.user .ai-chatbot-bubble {
+        background: #00a63f;
+        color: #fff;
+        border-bottom-right-radius: 4px;
+    }
+    
+    .ai-chatbot-msg.bot .ai-chatbot-bubble {
+        background: #3daef8;
+        color: #fff;
+        border-bottom-left-radius: 4px;
+    }
+    
+    @media (max-width: 768px) {
+        #ai-chatbot-window {
+            width: 90vw;
+            right: 5vw;
+            bottom: 80px;
+        }
+        
+        #ai-chatbot-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+        }
+    }
+    </style>
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    {% if user %}
+    <div class="user-welcome" style="background: linear-gradient(135deg, #3daef8 0%, #00a63f 100%); color: white; padding: 15px 0; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <h3 style="margin: 0; font-size: 1.2em;">Welcome back, {{ user.full_name }}! 👋</h3>
+            <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 0.95em;">Ready to analyze some faces?</p>
+        </div>
+    </div>
+    {% endif %}
+    
+    <header class="hero">
+        <div class="hero-background">
+            <img src="{{ url_for('static', filename='images/detection home.jpg') }}" alt="Face Detection AI" class="hero-image">
+            <div class="hero-overlay"></div>
+            <div class="hero-shapes">
+                <div class="hero-shape shape-1"></div>
+                <div class="hero-shape shape-2"></div>
+                <div class="hero-shape shape-3"></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge" data-aos="fade-down">AI POWERED</div>
+            <h1 class="hero-title" data-aos="fade-down" data-aos-delay="100">Face Analysis AI</h1>
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">Revolutionary AI technology that reads faces with unprecedented accuracy and speed</p>
+            <div class="hero-buttons" data-aos="fade-up" data-aos-delay="300">
+                <a href="#features" class="hero-btn primary">Explore Features</a>
+                <a href="{{ url_for('demo') }}" class="hero-btn secondary">Try Demo</a>
+            </div>
+            <div class="hero-stats" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-item">
+                    <span class="stat-number">99%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0.1s</span>
+                    <span class="stat-label">Response</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Available</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="features-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">WHY CHOOSE US</div>
+                <h2 class="section-title">Advanced, Accurate, and Fast</h2>
+                <p class="section-subtitle">Cutting-edge AI technology that delivers exceptional results</p>
+            </div>
+        <div class="feature-cards">
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon">⚡</div>
+                <h3>Real-Time Performance</h3>
+                <p>Lightning-fast detection and analysis, suitable for live video and large-scale applications.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <div class="icon">🔒</div>
+                <h3>Privacy First</h3>
+                <p>No personal data is stored. All processing can be done on-device for maximum privacy.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon">🔬</div>
+                <h3>Cutting-Edge AI</h3>
+                <p>State-of-the-art models trained on diverse datasets for robust, accurate results.</p>
+            </div>
+        </div>
+    </section>
+    <section class="estimation-section">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            </div>
+        
+        <div class="estimation-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">AI POWERED</div>
+                <h2 class="main-title">Face Analysis Technology</h2>
+                <p class="subtitle">Revolutionary AI that reads faces like never before</p>
+            </div>
+
+            <div class="features-showcase">
+                <div class="feature-card primary" data-aos="slide-up" data-aos-delay="100">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🎯</span>
+                            <div class="pulse-ring"></div>
+        </div>
+                        <div class="accuracy-badge">95%</div>
+            </div>
+                    <h3>Age Detection</h3>
+                    <p>Precise age estimation using advanced facial landmark analysis</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">±2</span>
+                            <span class="stat-label">Years Accuracy</span>
+            </div>
+                        <div class="stat">
+                            <span class="stat-number">0.1s</span>
+                            <span class="stat-label">Response Time</span>
+        </div>
+            </div>
+                    <div class="card-image">
+                        <img src="{{ url_for('static', filename='images/R.jpg') }}" alt="Age Detection">
+            </div>
+        </div>
+
+                <div class="feature-card secondary" data-aos="slide-up" data-aos-delay="200">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">⚖️</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">98%</div>
+                    </div>
+                    <h3>Gender Recognition</h3>
+                    <p>Intelligent gender classification with neural network precision</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Precision</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Real</span>
+                            <span class="stat-label">Time</span>
+                        </div>
+                    </div>
+                    <div class="card-image">
+                        <img src="{{ url_for('static', filename='images/F.jpg') }}" alt="Gender Recognition">
+                    </div>
+                </div>
+
+                <div class="feature-card accent" data-aos="slide-up" data-aos-delay="300">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">😊</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">7</div>
+                    </div>
+                    <h3>Emotion Analysis</h3>
+                    <p>Comprehensive emotion detection across 7 core expressions</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">7</span>
+                            <span class="stat-label">Emotions</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Live</span>
+                            <span class="stat-label">Detection</span>
+                        </div>
+                    </div>
+                    <div class="card-image">
+                        <img src="{{ url_for('static', filename='images/EM.jpeg') }}" alt="Emotion Analysis">
+                    </div>
+                </div>
+
+                <div class="feature-card premium" data-aos="slide-up" data-aos-delay="400">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🔐</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">99%</div>
+                    </div>
+                <h3>Face Recognition</h3>
+                    <p>Biometric security with enterprise-grade authentication</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">99%</span>
+                            <span class="stat-label">Accuracy</span>
+            </div>
+                        <div class="stat">
+                            <span class="stat-number">Fast</span>
+                            <span class="stat-label">Matching</span>
+                        </div>
+                    </div>
+                    <div class="card-image">
+                <img src="{{ url_for('static', filename='images/face reco.jpg') }}" alt="Face Recognition">
+            </div>
+        </div>
+
+                <div class="feature-card driver" data-aos="slide-up" data-aos-delay="500">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🚗</span>
+                            <div class="pulse-ring"></div>
+            </div>
+                        <div class="accuracy-badge">Real-time</div>
+            </div>
+                    <h3>Driver Monitoring</h3>
+                    <p>Advanced driver safety system with drowsiness and distraction detection</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Monitoring</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Alert</span>
+                            <span class="stat-label">System</span>
+                        </div>
+                    </div>
+                    <div class="card-image">
+                        <img src="{{ url_for('static', filename='images/driver.jpeg') }}" alt="Driver Monitoring">
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </section>
+
+   
+    <!-- AI Tech Section -->
+    <section class="ai-tech-section">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            </div>
+        
+        <div class="ai-tech-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">AI TECHNOLOGY</div>
+                <h2 class="main-title">Cutting-Edge AI Solutions</h2>
+                <p class="subtitle">Experience the power of advanced artificial intelligence with our state-of-the-art facial analysis technology</p>
+            </div>
+            
+            <div class="ai-tech-showcase">
+                <div class="ai-tech-card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🧠</span>
+                            <div class="pulse-ring"></div>
+            </div>
+                        <div class="accuracy-badge">99.9%</div>
+                    </div>
+                    <h3>Neural Networks</h3>
+                    <p>Deep learning algorithms trained on millions of facial data points for unparalleled accuracy and reliability.</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">10M+</span>
+                            <span class="stat-label">Data Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">0.1s</span>
+                            <span class="stat-label">Response</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-tech-card" data-aos="slide-up" data-aos-delay="200">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🔬</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">Real-time</div>
+                    </div>
+                    <h3>Computer Vision</h3>
+                    <p>Advanced computer vision technology that can detect and analyze facial features with incredible precision.</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">68</span>
+                            <span class="stat-label">Landmarks</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">HD</span>
+                            <span class="stat-label">Quality</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-tech-card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">⚙️</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">Optimized</div>
+                    </div>
+                    <h3>Machine Learning</h3>
+                    <p>Continuously improving algorithms that learn and adapt to provide better results with every analysis.</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Learning</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Auto</span>
+                            <span class="stat-label">Update</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="pricing-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">PRICING</div>
+                <h2 class="main-title">Choose Your Plan</h2>
+                <p class="subtitle">Flexible pricing options designed to meet your needs, from individual users to enterprise solutions</p>
+            </div>
+            
+            <div class="pricing-showcase">
+                <div class="pricing-card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🚀</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">Starter</div>
+                    </div>
+                    <h3>Basic Plan</h3>
+                    <div class="price">
+                        <span class="price-amount">$9</span>
+                        <span class="price-period">/month</span>
+                    </div>
+                    <p>Perfect for individuals and small projects looking to get started with AI facial analysis.</p>
+                    <ul class="pricing-features">
+                        <li>✓ 1,000 API calls/month</li>
+                        <li>✓ Basic facial analysis</li>
+                        <li>✓ Email support</li>
+                        <li>✓ Standard accuracy</li>
+                </ul>
+                    <button class="pricing-btn">Get Started</button>
+            </div>
+                
+                <div class="pricing-card featured" data-aos="slide-up" data-aos-delay="200">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">⭐</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">Popular</div>
+                    </div>
+                    <h3>Pro Plan</h3>
+                    <div class="price">
+                        <span class="price-amount">$29</span>
+                        <span class="price-period">/month</span>
+                    </div>
+                    <p>Ideal for growing businesses and developers who need advanced features and higher limits.</p>
+                    <ul class="pricing-features">
+                        <li>✓ 10,000 API calls/month</li>
+                        <li>✓ Advanced analysis features</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ High accuracy models</li>
+                        <li>✓ Custom integrations</li>
+                </ul>
+                    <button class="pricing-btn featured">Get Started</button>
+            </div>
+                
+                <div class="pricing-card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="card-header">
+                        <div class="feature-icon">
+                            <span class="icon">🏢</span>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="accuracy-badge">Enterprise</div>
+                    </div>
+                    <h3>Enterprise Plan</h3>
+                    <div class="price">
+                        <span class="price-amount">$99</span>
+                        <span class="price-period">/month</span>
+                    </div>
+                    <p>Complete solution for large organizations with unlimited usage and dedicated support.</p>
+                    <ul class="pricing-features">
+                        <li>✓ Unlimited API calls</li>
+                        <li>✓ All advanced features</li>
+                        <li>✓ Dedicated support</li>
+                        <li>✓ Custom AI models</li>
+                        <li>✓ White-label solution</li>
+                        <li>✓ SLA guarantee</li>
+                </ul>
+                    <button class="pricing-btn">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            </div>
+        
+        <div class="faq-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">FAQ</div>
+                <h2 class="main-title">Frequently Asked Questions</h2>
+                <p class="subtitle">Find answers to common questions about our AI facial analysis technology and services</p>
+            </div>
+            
+            <div class="faq-showcase">
+                <div class="faq-item" data-aos="slide-up" data-aos-delay="100">
+                    <div class="faq-question">
+                        <span class="icon">❓</span>
+                        <h3>How accurate is the facial analysis?</h3>
+                        <span class="faq-toggle">+</span>
+            </div>
+                    <div class="faq-answer">
+                        <p>Our AI models achieve 99.9% accuracy in facial analysis tasks, including age detection, gender recognition, and emotion analysis. The system is continuously trained on diverse datasets to maintain high performance across different demographics and conditions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="slide-up" data-aos-delay="200">
+                    <div class="faq-question">
+                        <span class="icon">🔒</span>
+                        <h3>Is my data secure and private?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we take data security very seriously. All data is encrypted in transit and at rest. We follow GDPR and other privacy regulations, and you have full control over your data. Images are processed in real-time and not stored permanently unless explicitly requested.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="slide-up" data-aos-delay="300">
+                    <div class="faq-question">
+                        <span class="icon">⚡</span>
+                        <h3>How fast is the processing?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our optimized AI algorithms process facial analysis in under 0.1 seconds. The system is designed for real-time applications and can handle multiple requests simultaneously without compromising accuracy or speed.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="slide-up" data-aos-delay="400">
+                    <div class="faq-question">
+                        <span class="icon">🔄</span>
+                        <h3>Can I integrate this into my application?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! We provide comprehensive APIs and SDKs for various programming languages including Python, JavaScript, Java, and more. Our documentation includes detailed integration guides and code examples to help you get started quickly.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="slide-up" data-aos-delay="500">
+                    <div class="faq-question">
+                        <span class="icon">📱</span>
+                        <h3>What platforms are supported?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our AI facial analysis works across all major platforms including web browsers, mobile apps (iOS/Android), desktop applications, and cloud services. We provide platform-specific SDKs and APIs for seamless integration.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="slide-up" data-aos-delay="600">
+                    <div class="faq-question">
+                        <span class="icon">🎯</span>
+                        <h3>What types of analysis are available?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer comprehensive facial analysis including age estimation, gender detection, emotion recognition, face recognition, driver monitoring, and facial landmark detection. Each analysis type can be used independently or combined for complete facial understanding.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Newsletter Signup Section -->
+    <section class="newsletter-section" style="background:#fff; padding:48px 0 36px 0; text-align:center;">
+        <h2 style="color:#18183a; font-size:2em; margin-bottom:18px;">Stay Updated</h2>
+        <p style="color:#222; margin-bottom:22px;">Get the latest AI news and product updates straight to your inbox.</p>
+        <form style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px; max-width:420px; margin:0 auto;">
+            <input type="email" placeholder="Your email address" required style="flex:1; padding:12px; border-radius:6px; border:1px solid #c3e0f7; font-size:1em;">
+            <button type="submit" class="explore-btn" style="margin:0;">Subscribe</button>
+        </form>
+    </section>
+    <!-- Footer Section -->
+    <footer style="background:black; color:#fff; padding:36px 0 18px 0; text-align:center;">
+        <div style="margin-bottom:12px;">
+            <a href="/" style="color:#3daef8; font-weight:bold; font-size:1.3em; text-decoration:none;">FaceAI</a>
+        </div>
+        <div style="margin-bottom:10px;">
+            <a href="/services" style="color:#fff; margin:0 12px; text-decoration:none;">Services</a>
+            <a href="/products" style="color:#fff; margin:0 12px; text-decoration:none;">Products</a>
+            <a href="/usecases" style="color:#fff; margin:0 12px; text-decoration:none;">Use Cases</a>
+            <a href="/about" style="color:#fff; margin:0 12px; text-decoration:none;">About</a>
+            <a href="/contact" style="color:#fff; margin:0 12px; text-decoration:none;">Contact</a>
+        </div>
+        <div style="margin-bottom:10px;">
+            <a href="#" style="color:#3daef8; margin:0 8px; text-decoration:none;">Twitter</a>
+            <a href="#" style="color:#3daef8; margin:0 8px; text-decoration:none;">LinkedIn</a>
+            <a href="#" style="color:#3daef8; margin:0 8px; text-decoration:none;">GitHub</a>
+        </div>
+        <div style="color:#aaa; font-size:0.95em;">&copy; 2025 FaceAI. All rights reserved.</div>
+    </footer>
+
+    <!-- End of new sections -->
+    
+    <!-- AI Chatbot -->
+    <button id="ai-chatbot-btn" onclick="toggleChatbot()">💬</button>
+    <div id="ai-chatbot-window">
+        <div id="ai-chatbot-header">
+            <span>AI Assistant</span>
+            <button id="ai-chatbot-close" onclick="toggleChatbot()">×</button>
+        </div>
+        <div id="ai-chatbot-messages">
+            <div class="ai-chatbot-msg bot">
+                <div class="ai-chatbot-bubble">
+                    {% if user %}
+                        Hi {{ user.full_name }}! 👋 How can I help you today?
+                    {% else %}
+                        Hi! 👋 How can I help you today?
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div id="ai-chatbot-input-area">
+            <input type="text" id="ai-chatbot-input" placeholder="Type your message..." onkeypress="handleChatbotKeyPress(event)">
+            <button id="ai-chatbot-send" onclick="sendChatbotMessage()">Send</button>
+        </div>
+    </div>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      // Initialize AOS
+      AOS.init({ duration: 900, once: true });
+
+      // Smooth scroll for anchor links
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href').slice(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        });
+      });
+
+      // Button feedback (ripple effect)
+      document.querySelectorAll('.explore-btn, .demo-btn, .cta-btn').forEach(btn => {
+        btn.addEventListener('mousedown', function(e) {
+          this.style.transform = 'scale(0.96)';
+        });
+        btn.addEventListener('mouseup', function(e) {
+          this.style.transform = '';
+        });
+        btn.addEventListener('mouseleave', function(e) {
+          this.style.transform = '';
+        });
+      });
+
+      // Preload main images for faster perceived load
+      [
+        '{{ url_for('static', filename='images/EM.jpeg') }}',
+        '{{ url_for('static', filename='images/F.jpg') }}',
+        '{{ url_for('static', filename='images/R.jpg') }}',
+        '{{ url_for('static', filename='images/face reco.jpg') }}',
+        '{{ url_for('static', filename='images/driver.jpeg') }}',
+        '{{ url_for('static', filename='images/detection home.jpg') }}'
+      ].forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+
+      // Pricing plan interactive effects
+      document.addEventListener('DOMContentLoaded', function() {
+        const pricingCards = document.querySelectorAll('.pricing-card');
+        let activeCard = null;
+
+        pricingCards.forEach((card, index) => {
+          // Add click event to select a plan
+          card.addEventListener('click', function() {
+            // Remove active class from all cards
+            pricingCards.forEach(c => {
+              c.classList.remove('active-plan');
+              c.style.transform = '';
+              c.style.zIndex = '';
+            });
+            
+            // Add active class to clicked card
+            this.classList.add('active-plan');
+            this.style.transform = 'translateY(-15px) scale(1.05)';
+            this.style.zIndex = '10';
+            activeCard = this;
+            
+            // Add subtle movement to other cards
+            pricingCards.forEach((otherCard, otherIndex) => {
+              if (otherCard !== this) {
+                const direction = otherIndex < index ? -1 : 1;
+                otherCard.style.transform = `translateX(${direction * 20}px) translateY(-5px) scale(0.98)`;
+                otherCard.style.zIndex = '5';
+              }
+            });
+          });
+
+          // Mouse enter effect - cards move towards the hovered card
+          card.addEventListener('mouseenter', function() {
+            if (!activeCard) {
+              pricingCards.forEach((otherCard, otherIndex) => {
+                if (otherCard !== this) {
+                  const direction = otherIndex < index ? -1 : 1;
+                  otherCard.style.transform = `translateX(${direction * 10}px) translateY(-3px) scale(0.99)`;
+                  otherCard.style.transition = 'all 0.3s ease';
+                }
+              });
+            }
+          });
+
+          // Mouse leave effect - cards return to original position
+          card.addEventListener('mouseleave', function() {
+            if (!activeCard) {
+              pricingCards.forEach(otherCard => {
+                otherCard.style.transform = '';
+                otherCard.style.transition = 'all 0.3s ease';
+              });
+            }
+          });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && activeCard) {
+            pricingCards.forEach(card => {
+              card.classList.remove('active-plan');
+              card.style.transform = '';
+              card.style.zIndex = '';
+            });
+            activeCard = null;
+          }
+        });
+
+        // Add touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        pricingCards.forEach((card, index) => {
+          card.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+          });
+
+          card.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe(index);
+          });
+        });
+
+        function handleSwipe(currentIndex) {
+          const swipeThreshold = 50;
+          const diff = touchStartX - touchEndX;
+
+          if (Math.abs(diff) > swipeThreshold) {
+            let targetIndex;
+            if (diff > 0) {
+              // Swipe left - go to next card
+              targetIndex = (currentIndex + 1) % pricingCards.length;
+            } else {
+              // Swipe right - go to previous card
+              targetIndex = (currentIndex - 1 + pricingCards.length) % pricingCards.length;
+            }
+            
+            // Simulate click on target card
+            pricingCards[targetIndex].click();
+          }
+        }
+      });
+      
+      // AI Chatbot Functions
+      function toggleChatbot() {
+        const chatbotWindow = document.getElementById('ai-chatbot-window');
+        const chatbotBtn = document.getElementById('ai-chatbot-btn');
+        
+        if (chatbotWindow.style.display === 'none' || chatbotWindow.style.display === '') {
+          chatbotWindow.style.display = 'flex';
+          chatbotBtn.style.display = 'none';
+          document.getElementById('ai-chatbot-input').focus();
+          
+          // Update welcome message with user name if available
+          updateChatbotWelcome();
+        } else {
+          chatbotWindow.style.display = 'none';
+          chatbotBtn.style.display = 'flex';
+        }
+      }
+      
+      function updateChatbotWelcome() {
+        // Try to get user name from the page
+        const userWelcomeElement = document.querySelector('.user-welcome');
+        if (userWelcomeElement) {
+          const userName = userWelcomeElement.textContent.trim();
+          if (userName) {
+            const welcomeMessage = document.querySelector('#ai-chatbot-messages .ai-chatbot-msg.bot .ai-chatbot-bubble');
+            if (welcomeMessage) {
+              welcomeMessage.textContent = `Hi ${userName}! 👋 How can I help you today?`;
+            }
+          }
+        }
+      }
+      
+      function handleChatbotKeyPress(event) {
+        if (event.key === 'Enter') {
+          sendChatbotMessage();
+        }
+      }
+      
+      function sendChatbotMessage() {
+        const input = document.getElementById('ai-chatbot-input');
+        const message = input.value.trim();
+        
+        if (message === '') return;
+        
+        // Add user message
+        addChatbotMessage(message, 'user');
+        input.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Send message to backend
+        fetch('/chatbot', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+          hideTypingIndicator();
+          if (data.response) {
+            addChatbotMessage(data.response, 'bot');
+          } else {
+            addChatbotMessage('Sorry, I encountered an error. Please try again.', 'bot');
+          }
+        })
+        .catch(error => {
+          hideTypingIndicator();
+          addChatbotMessage('Sorry, I\'m having trouble connecting. Please try again later.', 'bot');
+        });
+      }
+      
+      function addChatbotMessage(message, sender) {
+        const messagesContainer = document.getElementById('ai-chatbot-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `ai-chatbot-msg ${sender}`;
+        
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'ai-chatbot-bubble';
+        bubbleDiv.textContent = message;
+        
+        messageDiv.appendChild(bubbleDiv);
+        messagesContainer.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      
+      function showTypingIndicator() {
+        const messagesContainer = document.getElementById('ai-chatbot-messages');
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'ai-chatbot-msg bot';
+        typingDiv.id = 'typing-indicator';
+        
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'ai-chatbot-bubble';
+        bubbleDiv.innerHTML = '<span class="typing-dots">Typing<span>.</span><span>.</span><span>.</span></span>';
+        
+        typingDiv.appendChild(bubbleDiv);
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      
+      function hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+      
+      // Add typing animation CSS
+      const style = document.createElement('style');
+      style.textContent = `
+        .typing-dots span {
+          animation: typing 1.4s infinite;
+          opacity: 0;
+        }
+        .typing-dots span:nth-child(1) { animation-delay: 0s; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+          0%, 60%, 100% { opacity: 0; }
+          30% { opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // FAQ Functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+          const question = item.querySelector('.faq-question');
+          
+          question.addEventListener('click', function() {
+            const isActive = item.classList.contains('active');
+            
+            // Close all FAQ items
+            faqItems.forEach(otherItem => {
+              otherItem.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+              item.classList.add('active');
+            }
+          });
+        });
+      });
+    </script>
+
+    <!-- Gradient Fill Section -->
+    
+</body>
+</html> 

@@ -1,0 +1,8 @@
+flask
+# OpenCV 5 removed Caffe DNN import support used by the bundled models.
+opencv-python<5
+numpy
+flask-mail
+flask-cors
+# Face recognition and driver monitoring use the included OpenCV compatibility
+# layers, so no dlib build is required.

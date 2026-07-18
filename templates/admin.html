@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Face Analysis AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 32px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5em;
+            font-weight: 800;
+            color: white;
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .sidebar-nav {
+            padding: 24px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: #667eea;
+        }
+
+        .nav-item-icon {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 1.1em;
+        }
+
+        .nav-item-text {
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .user-details h4 {
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-details p {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: #f8fafc;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 24px 32px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 32px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .stat-icon.users { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .stat-icon.date { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .stat-icon.login { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .stat-icon.email { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+        .stat-number {
+            font-size: 1.2em;
+            font-weight: 800;
+            color: #023382;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .section-content {
+            padding: 32px;
+        }
+        
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Status Badges */
+        .status-badge {
+                padding: 6px 12px;
+            border-radius: 20px;
+                font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+                letter-spacing: 0.5px;
+        }
+
+        .role-admin {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-user {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-view {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .btn-view:hover {
+            background: #a7f3d0;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .btn-edit:hover {
+            background: #bfdbfe;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-delete:hover {
+            background: #fecaca;
+        }
+
+        .btn-face {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .btn-face:hover {
+            background: #fde68a;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            background: none;
+            border: none;
+        }
+        
+        .close:hover {
+            opacity: 0.7;
+        }
+        
+        .modal-body {
+            padding: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95em;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+            margin-top: 32px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+            padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .section-content {
+                padding: 20px;
+            }
+
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+                    <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <span>FaceAI Admin</span>
+            </div>
+        </div>
+
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin') }}" class="nav-item active">
+                    <span class="nav-item-icon">📊</span>
+                    <span class="nav-item-text">Dashboard</span>
+                </a>
+                <a href="{{ url_for('face_recognition_page') }}" class="nav-item">
+                    <span class="nav-item-icon">👤</span>
+                    <span class="nav-item-text">Face Recognition</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('feedback')">
+                    <span class="nav-item-icon">💬</span>
+                    <span class="nav-item-text">User Feedback</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ user.full_name[0].upper() }}
+                    </div>
+                    <div class="user-details">
+                        <h4>{{ user.full_name }}</h4>
+                        <p>{{ user.role.title() }}</p>
+                </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="{{ url_for('logout') }}" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                        <span>🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div>
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                    <h1 class="page-title">Admin Dashboard</h1>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="btn btn-primary" onclick="showAddUserModal()">
+                        <span>➕</span>
+                        <span>Add User</span>
+                    </button>
+                </div>
+        </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-header">
+                            <div class="stat-icon users">👥</div>
+                        </div>
+                    <div class="stat-number">{{ all_users|length }}</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-header">
+                            <div class="stat-icon date">📅</div>
+                        </div>
+                    <div class="stat-number">{{ user.created_at.split('T')[0] if user else 'N/A' }}</div>
+                    <div class="stat-label">Member Since</div>
+                </div>
+
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-header">
+                            <div class="stat-icon login">🔄</div>
+                        </div>
+                    <div class="stat-number">{{ user.last_login.split('T')[0] if user and user.last_login else 'Never' }}</div>
+                    <div class="stat-label">Last Login</div>
+                </div>
+
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="stat-header">
+                            <div class="stat-icon email">📧</div>
+                        </div>
+                    <div class="stat-number">{{ user.email }}</div>
+                    <div class="stat-label">Your Email</div>
+                </div>
+                    </div>
+
+                <!-- User Management Section -->
+                <div class="content-section" data-aos="fade-up" data-aos-delay="500">
+                    <div class="section-header">
+                        <h2 class="section-title">User Management</h2>
+                        <div class="section-actions">
+                            <button class="btn btn-primary" onclick="showAddUserModal()">
+                                <span>➕</span>
+                                <span>Add New User</span>
+                            </button>
+                    </div>
+                    </div>
+                    <div class="section-content">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Search users by name or email...">
+                            <button class="btn btn-secondary" onclick="searchUsers()">Search</button>
+                </div>
+                
+                        <div class="table-container">
+                            <table class="data-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Created Date</th>
+                            <th>Last Login</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_id, user_data in all_users.items() %}
+                        <tr>
+                            <td>{{ user_data.id }}</td>
+                            <td>{{ user_data.full_name }}</td>
+                            <td>{{ user_data.email }}</td>
+                            <td>
+                                <span class="role-badge role-{{ user_data.role }}">
+                                    {{ user_data.role.title() }}
+                                </span>
+                            </td>
+                            <td>{{ user_data.created_at.split('T')[0] if 'T' in user_data.created_at else user_data.created_at }}</td>
+                            <td>{{ user_data.last_login.split('T')[0] if user_data.last_login and 'T' in user_data.last_login else (user_data.last_login if user_data.last_login else 'Never') }}</td>
+                            <td>
+                                            <span class="status-badge status-active">Active</span>
+                            </td>
+                            <td>
+                                            <div class="action-buttons">
+                                <button class="action-btn btn-view" onclick="viewUser('{{ user_data.id }}')">View</button>
+                                <button class="action-btn btn-edit" onclick="editUser('{{ user_data.id }}')">Edit</button>
+                                <button class="action-btn btn-face" onclick="registerFace('{{ user_data.id }}')" title="Register Face">👤</button>
+                                {% if user_data.id != user.id %}
+                                <button class="action-btn btn-delete" onclick="deleteUser('{{ user_data.id }}')">Delete</button>
+                                {% endif %}
+                                            </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                    </div>
+                </div>
+
+                <!-- Password Reset Requests Section -->
+                <div class="content-section" data-aos="fade-up" data-aos-delay="600">
+                    <div class="section-header">
+                        <h2 class="section-title">Password Reset Requests</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="search-container">
+                            <input type="text" id="resetSearchInput" class="search-input" placeholder="Search reset requests by email...">
+                            <button class="btn btn-secondary" onclick="searchResetRequests()">Search</button>
+                </div>
+                
+                        <div class="table-container">
+                            <table class="data-table" id="resetRequestsTable">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Email</th>
+                            <th>User Name</th>
+                            <th>User Role</th>
+                            <th>Request IP</th>
+                            <th>Request Time</th>
+                            <th>Status</th>
+                            <th>Email Sent</th>
+                            <th>Token Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in password_reset_requests %}
+                        <tr>
+                            <td>{{ request.id }}</td>
+                            <td>{{ request.email }}</td>
+                            <td>{{ request.user_name }}</td>
+                            <td>
+                                <span class="role-badge role-{{ request.user_role }}">
+                                    {{ request.user_role.title() }}
+                                </span>
+                            </td>
+                            <td>{{ request.request_ip }}</td>
+                            <td>{{ request.request_time.split('T')[0] if 'T' in request.request_time else request.request_time }}</td>
+                            <td>
+                                <span class="status-badge status-{{ request.status.replace('_', '-') }}">
+                                    {{ request.status.replace('_', ' ').title() }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if request.email_sent %}
+                                    <span class="status-badge status-success">Yes</span>
+                                    {% if request.email_sent_time %}
+                                        <br><small>{{ request.email_sent_time.split('T')[0] if 'T' in request.email_sent_time else request.email_sent_time }}</small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="status-badge status-pending">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if request.token_created %}
+                                    <span class="status-badge status-success">Yes</span>
+                                {% else %}
+                                    <span class="status-badge status-pending">No</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                    </div>
+                        </div>
+                    </div>
+
+                <!-- User Feedback Section -->
+                <div class="content-section" id="feedbackSection" style="display: none;" data-aos="fade-up" data-aos-delay="700">
+                    <div class="section-header">
+                        <h2 class="section-title">User Feedback</h2>
+                        <div class="section-actions">
+                            <button class="btn btn-secondary" onclick="refreshFeedback()">
+                                <span>🔄</span>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="data-table" id="feedbackTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Submitted</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feedbackTableBody">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 40px;">
+                                            <div class="loading-state">
+                                                <span>📧</span>
+                                                <p>Loading feedback...</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <button class="close" onclick="closeAddUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                </div>
+                    <div class="form-group">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password" name="password" required>
+            </div>
+                    <div class="form-group">
+                        <label for="role">Role *</label>
+                        <select id="role" name="role" required>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+        <script>
+            AOS.init({ duration: 800, once: true });
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+            // Search functionality
+            function searchUsers() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const table = document.getElementById('usersTable');
+                const rows = table.getElementsByTagName('tr');
+
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const cells = row.getElementsByTagName('td');
+                    let found = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].textContent.toLowerCase();
+                        if (cellText.includes(searchTerm)) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    row.style.display = found ? '' : 'none';
+                }
+            }
+
+            function searchResetRequests() {
+                const searchTerm = document.getElementById('resetSearchInput').value.toLowerCase();
+                const table = document.getElementById('resetRequestsTable');
+                const rows = table.getElementsByTagName('tr');
+
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const cells = row.getElementsByTagName('td');
+                    let found = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].textContent.toLowerCase();
+                        if (cellText.includes(searchTerm)) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    row.style.display = found ? '' : 'none';
+                }
+            }
+
+        // User management functions
+        function viewUser(userId) {
+            Swal.fire({
+                title: 'User Details',
+                text: 'View user details for ID: ' + userId,
+                icon: 'info'
+            });
+        }
+
+        function editUser(userId) {
+            Swal.fire({
+                title: 'Edit User',
+                text: 'Edit user for ID: ' + userId,
+                icon: 'info'
+            });
+        }
+
+        function registerFace(userId) {
+            // Redirect to the face registration page for this user
+            window.location.href = `/admin/register-face/${userId}`;
+        }
+
+        function deleteUser(userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/admin/users/${userId}`, {
+                        method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                        }
+                })
+                .then(response => response.json())
+                .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                'Deleted!',
+                                'User has been deleted.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                    } else {
+                            Swal.fire(
+                                'Error!',
+                                data.error || 'Failed to delete user',
+                                'error'
+                            );
+                    }
+                })
+                .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'Error!',
+                            'Network error occurred',
+                            'error'
+                        );
+                    });
+                }
+            });
+        }
+
+        // Modal functions
+            function showAddUserModal() {
+                document.getElementById('addUserModal').style.display = 'block';
+            }
+            
+            function closeAddUserModal() {
+                document.getElementById('addUserModal').style.display = 'none';
+                document.getElementById('addUserForm').reset();
+            }
+            
+            // Handle form submission
+            document.getElementById('addUserForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    role: document.getElementById('role').value
+                };
+                
+                try {
+                    const response = await fetch('/api/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: result.message,
+                            icon: 'success'
+                        }).then(() => {
+                            closeAddUserModal();
+                        location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.error || 'Failed to add user',
+                            icon: 'error'
+                        });
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Network error occurred',
+                        icon: 'error'
+                    });
+                }
+            });
+            
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                const modal = document.getElementById('addUserModal');
+                if (event.target === modal) {
+                    closeAddUserModal();
+                }
+            }
+
+            // Feedback Management Functions
+            function showSection(sectionName) {
+                // Hide all sections
+                const sections = document.querySelectorAll('.content-section');
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Remove active class from all nav items
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Show requested section
+                if (sectionName === 'feedback') {
+                    document.getElementById('feedbackSection').style.display = 'block';
+                    event.target.classList.add('active');
+                    loadFeedback();
+                }
+            }
+
+            async function loadFeedback() {
+                try {
+                    const response = await fetch('/api/admin/feedback');
+                    const result = await response.json();
+                    
+                    const tbody = document.getElementById('feedbackTableBody');
+                    
+                    if (result.success && result.feedback.length > 0) {
+                        tbody.innerHTML = result.feedback.map(feedback => `
+                            <tr>
+                                <td>${feedback.id}</td>
+                                <td>${feedback.name}</td>
+                                <td>${feedback.email}</td>
+                                <td>${feedback.subject}</td>
+                                <td>${new Date(feedback.submitted_at).toLocaleDateString()}</td>
+                                <td>
+                                    <span class="status-badge status-${feedback.status}">
+                                        ${feedback.status.charAt(0).toUpperCase() + feedback.status.slice(1)}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="action-btn btn-view" onclick="viewFeedback(${feedback.id})">View</button>
+                                        <button class="action-btn btn-edit" onclick="respondToFeedback(${feedback.id})">Respond</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px;">
+                                    <div class="loading-state">
+                                        <span>📭</span>
+                                        <p>No feedback received yet.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Error loading feedback:', error);
+                    document.getElementById('feedbackTableBody').innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px;">
+                                <div class="loading-state">
+                                    <span>❌</span>
+                                    <p>Error loading feedback.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            function refreshFeedback() {
+                loadFeedback();
+            }
+
+            async function viewFeedback(id) {
+                try {
+                    const response = await fetch(`/api/admin/feedback/${id}`);
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        const feedback = result.feedback;
+                        Swal.fire({
+                            title: 'Feedback Details',
+                            html: `
+                                <div style="text-align: left;">
+                                    <p><strong>From:</strong> ${feedback.name} (${feedback.email})</p>
+                                    <p><strong>Subject:</strong> ${feedback.subject}</p>
+                                    <p><strong>Submitted:</strong> ${new Date(feedback.submitted_at).toLocaleString()}</p>
+                                    <p><strong>Status:</strong> ${feedback.status}</p>
+                                    <br>
+                                    <p><strong>Message:</strong></p>
+                                    <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; border-left: 3px solid #00d4ff;">
+                                        ${feedback.message}
+                                    </div>
+                                    ${feedback.admin_response ? `
+                                        <br>
+                                        <p><strong>Admin Response:</strong></p>
+                                        <div style="background: #e8f5e8; padding: 10px; border-radius: 5px; border-left: 3px solid #28a745;">
+                                            ${feedback.admin_response}
+                                        </div>
+                                        <p style="font-size: 0.9em; color: #666;">
+                                            Responded by ${feedback.responder_name || 'Admin'} on ${new Date(feedback.responded_at).toLocaleString()}
+                                        </p>
+                                    ` : ''}
+                                </div>
+                            `,
+                            width: '600px',
+                            showCloseButton: true,
+                            showConfirmButton: false
+                        });
+                    }
+                } catch (error) {
+                    Swal.fire('Error', 'Failed to load feedback details', 'error');
+                }
+            }
+
+            async function respondToFeedback(id) {
+                const { value: response } = await Swal.fire({
+                    title: 'Respond to Feedback',
+                    input: 'textarea',
+                    inputLabel: 'Your response',
+                    inputPlaceholder: 'Type your response here...',
+                    inputAttributes: {
+                        'aria-label': 'Type your response here'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Send Response',
+                    cancelButtonText: 'Cancel'
+                });
+
+                if (response) {
+                    try {
+                        const apiResponse = await fetch(`/api/admin/feedback/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                status: 'responded',
+                                admin_response: response
+                            })
+                        });
+
+                        const result = await apiResponse.json();
+
+                        if (result.success) {
+                            Swal.fire('Success', 'Response sent successfully!', 'success');
+                            loadFeedback(); // Refresh the table
+                        } else {
+                            Swal.fire('Error', result.error || 'Failed to send response', 'error');
+                        }
+                    } catch (error) {
+                        Swal.fire('Error', 'Failed to send response', 'error');
+                    }
+                }
+            }
+        </script>
+</body>
+</html>

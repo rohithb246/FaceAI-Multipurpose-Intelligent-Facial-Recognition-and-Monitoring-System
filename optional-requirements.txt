@@ -1,0 +1,5 @@
+# The application now includes OpenCV compatibility layers for face recognition
+# and driver monitoring, so no optional native dependencies are required.
+#
+# For production-grade biometric matching, install the upstream dlib and
+# face-recognition packages separately in a supported Python environment.

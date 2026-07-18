@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Registration - Face Analysis AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Container */
+        .registration-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Header */
+        .registration-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            position: relative;
+        }
+
+        .registration-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .registration-header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .registration-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        /* Camera Section */
+        .camera-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #cameraFeed {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            margin: 0 auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .camera-controls {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Status */
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Back Button */
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .registration-container {
+                margin: 20px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-header">
+            <h1>Face Registration</h1>
+            <p>Register a user's face for facial recognition</p>
+        </div>
+
+        <div class="registration-form">
+            <div class="form-group">
+                <label for="userName">User Name</label>
+                <input type="text" id="userName" name="userName" value="{{ user_data.full_name }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="userAge">Age</label>
+                <input type="number" id="userAge" name="userAge" placeholder="Enter user's age" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userContact">Contact Number</label>
+                <input type="tel" id="userContact" name="userContact" placeholder="Enter contact number" required>
+            </div>
+
+            <div class="camera-section">
+                <h3>Capture Face Image</h3>
+                <p>Position the face in the center of the frame</p>
+                <video id="cameraFeed" autoplay></video>
+                <div class="camera-controls">
+                    <button class="btn btn-secondary" id="startCamera">Start Camera</button>
+                    <button class="btn btn-primary" id="captureImage" disabled>Capture Image</button>
+                </div>
+            </div>
+
+            <div id="statusMessage" class="status-message" style="display: none;"></div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" id="registerFace" disabled>Register Face</button>
+                <a href="/admin" class="back-link">Back to Admin Panel</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const startCameraBtn = document.getElementById('startCamera');
+        const captureFaceBtn = document.getElementById('captureImage');
+        const registerFaceBtn = document.getElementById('registerFace');
+        const cameraFeed = document.getElementById('cameraFeed');
+        const statusMessage = document.getElementById('statusMessage');
+        const userAgeInput = document.getElementById('userAge');
+        const userContactInput = document.getElementById('userContact');
+
+        // Variables
+        let stream = null;
+        let capturedImage = null;
+        const userId = new URLSearchParams(window.location.search).get('user_id');
+
+        // Start camera
+        startCameraBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cameraFeed.srcObject = stream;
+                startCameraBtn.disabled = true;
+                captureFaceBtn.disabled = false;
+                showStatus('Camera started successfully', 'success');
+            } catch (err) {
+                showStatus('Error accessing camera: ' + err.message, 'error');
+            }
+        });
+
+        // Capture image
+        captureFaceBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+            canvas.getContext('2d').drawImage(cameraFeed, 0, 0);
+            capturedImage = canvas.toDataURL('image/jpeg');
+            
+            // Display the captured image
+            cameraFeed.pause();
+            cameraFeed.style.opacity = 0.7;
+            
+            registerFaceBtn.disabled = false;
+            showStatus('Image captured! Click "Register Face" to complete registration.', 'success');
+        });
+
+        // Register face
+        registerFaceBtn.addEventListener('click', async () => {
+            // Validate inputs
+            const age = userAgeInput.value.trim();
+            const contact = userContactInput.value.trim();
+            
+            if (!age) {
+                showStatus('Please enter the user\'s age', 'error');
+                return;
+            }
+            
+            if (!contact) {
+                showStatus('Please enter a contact number', 'error');
+                return;
+            }
+            
+            if (!capturedImage) {
+                showStatus('Please capture an image first', 'error');
+                return;
+            }
+
+            try {
+                showStatus('Registering face...', 'info');
+                
+                const response = await fetch('/api/admin/face-register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        age: age,
+                        contact: contact,
+                        image: capturedImage
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Face registered successfully',
+                        icon: 'success',
+                        confirmButtonText: 'Back to Admin Panel'
+                    }).then(() => {
+                        window.location.href = '/admin';
+                    });
+                } else {
+                    showStatus('Error: ' + (result.error || 'Unknown error'), 'error');
+                }
+            } catch (err) {
+                showStatus('Error: ' + err.message, 'error');
+            }
+        });
+
+        // Helper function to show status messages
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message';
+            statusMessage.classList.add('status-' + (type || 'info'));
+            statusMessage.style.display = 'block';
+        }
+
+        // Clean up when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
