@@ -1,0 +1,24 @@
+# Python environments and caches
+.venv/
+venv/
+.runtime/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local configuration and generated files
+.env
+*.log
+uploads/
+local_face_recognition/faces/
+
+# Local SQLite data may contain accounts and biometric metadata.
+*.db
+*.sqlite
+*.sqlite3
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
