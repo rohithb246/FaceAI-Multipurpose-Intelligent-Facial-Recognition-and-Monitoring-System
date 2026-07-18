@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,4 +86,93 @@
         AOS.init({ duration: 800, once: true });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">LEGAL</div>
+                <h2 class="main-title">Terms of Service</h2>
+                <p class="subtitle">Please read these terms carefully before using our services</p>
+            </div>
+            
+            <div class="card" style="max-width: 900px; margin: 0 auto;" data-aos="fade-up">
+                <div class="text-content" style="line-height: 1.8; color: rgba(255, 255, 255, 0.9);">
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">1. Acceptance of Terms</h3>
+                    <p style="margin-bottom: 20px;">By accessing and using FaceAI, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">2. Use License</h3>
+                    <p style="margin-bottom: 20px;">Permission is granted to temporarily download one copy of the materials on FaceAI for personal, non-commercial transitory viewing only.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">3. Privacy</h3>
+                    <p style="margin-bottom: 20px;">Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">4. Disclaimer</h3>
+                    <p style="margin-bottom: 20px;">The materials on FaceAI are provided on an 'as is' basis. FaceAI makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">5. Limitations</h3>
+                    <p style="margin-bottom: 20px;">In no event shall FaceAI or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on FaceAI.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">6. Accuracy of Materials</h3>
+                    <p style="margin-bottom: 20px;">The materials appearing on FaceAI could include technical, typographical, or photographic errors. FaceAI does not warrant that any of the materials on its website are accurate, complete or current.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">7. Links</h3>
+                    <p style="margin-bottom: 20px;">FaceAI has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by FaceAI of the site.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">8. Modifications</h3>
+                    <p style="margin-bottom: 20px;">FaceAI may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these Terms of Service.</p>
+                    
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">9. Governing Law</h3>
+                    <p style="margin-bottom: 20px;">These terms and conditions are governed by and construed in accordance with the laws and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('usecases') }}">Use Cases</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+            <div class="footer-legal">
+                <a href="{{ url_for('terms') }}">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
 </html> 

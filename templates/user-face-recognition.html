@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -436,4 +437,444 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition - FaceAI</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            color: #666;
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(46, 45, 45, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #1f1f20 0%, #0a0a0a 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .recognition-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .camera-container {
+            width: 100%;
+            max-width: 640px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        #cameraFeed, #capturedImage {
+            width: 100%;
+            height: 480px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            object-fit: cover;
+        }
+        
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #424242 0%, #040404 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 640px;
+        }
+        
+        .user-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .user-details h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            width: 120px;
+            color: #555;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .not-registered {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .not-registered h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .not-registered p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .info-box h4 {
+            color: #1976d2;
+            margin: 0 0 10px 0;
+        }
+        
+        .info-box p {
+            color: #424242;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            
+            .camera-container {
+                height: auto;
+            }
+            
+            #cameraFeed, #capturedImage {
+                height: 360px;
+            }
+            
+            .camera-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/user-dashboard" class="back-link">← Back to Dashboard</a>
+        
+        <div class="header">
+            <h1>🔍 Face Recognition</h1>
+            <p>Identify registered persons using our advanced face recognition system</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                Face Recognition System
+            </div>
+            <div class="card-body">
+                <div class="info-box">
+                    <h4>ℹ️ How it works</h4>
+                    <p>This system can recognize faces that have been registered by administrators. Only registered persons can be identified.</p>
+                </div>
+                
+                <div class="recognition-section">
+                    <div class="camera-container">
+                        <video id="cameraFeed" autoplay style="display: none;"></video>
+                        <img id="capturedImage" src="{{ url_for('static', filename='images/face-placeholder.jpg') }}" alt="Captured image" style="display: block;">
+                    </div>
+                    
+                    <div class="camera-controls">
+                        <button id="startCamera" class="btn">Start Camera</button>
+                        <button id="captureImage" class="btn" disabled>Capture Image</button>
+                        <button id="recognizeFace" class="btn" disabled>Recognize Face</button>
+                    </div>
+                    
+                    <div class="result-container">
+                        <div id="userDetails" class="user-details">
+                            <h3>👤 Recognized Person Details</h3>
+                            <div class="detail-row">
+                                <div class="detail-label">Name:</div>
+                                <div class="detail-value" id="userName">-</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Age:</div>
+                                <div class="detail-value" id="userAge">-</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Contact:</div>
+                                <div class="detail-value" id="userContact">-</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Registration Date:</div>
+                                <div class="detail-value" id="userRegistrationDate">-</div>
+                            </div>
+                        </div>
+                        
+                        <div id="notRegistered" class="not-registered" style="display: none;">
+                            <h3>❌ Face Not Recognized</h3>
+                            <p>We couldn't find this face in our database. This person may not be registered yet.</p>
+                            <p><strong>Note:</strong> Only persons registered by administrators can be recognized.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const startCameraBtn = document.getElementById('startCamera');
+        const captureFaceBtn = document.getElementById('captureImage');
+        const recognizeFaceBtn = document.getElementById('recognizeFace');
+        const cameraFeed = document.getElementById('cameraFeed');
+        const capturedImage = document.getElementById('capturedImage');
+        const userDetails = document.getElementById('userDetails');
+        const notRegistered = document.getElementById('notRegistered');
+        const userName = document.getElementById('userName');
+        const userAge = document.getElementById('userAge');
+        const userContact = document.getElementById('userContact');
+        const userRegistrationDate = document.getElementById('userRegistrationDate');
+        
+        // Variables
+        let stream = null;
+        let imageData = null;
+        
+        // Start camera
+        startCameraBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cameraFeed.srcObject = stream;
+                cameraFeed.style.display = 'block';
+                capturedImage.style.display = 'none';
+                startCameraBtn.textContent = 'Restart Camera';
+                captureFaceBtn.disabled = false;
+                recognizeFaceBtn.disabled = true;
+                userDetails.style.display = 'none';
+                notRegistered.style.display = 'none';
+            } catch (err) {
+                Swal.fire({
+                    title: 'Camera Error',
+                    text: 'Could not access camera: ' + err.message,
+                    icon: 'error'
+                });
+            }
+        });
+        
+        // Capture image
+        captureFaceBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+            canvas.getContext('2d').drawImage(cameraFeed, 0, 0);
+            imageData = canvas.toDataURL('image/jpeg');
+            
+            capturedImage.src = imageData;
+            capturedImage.style.display = 'block';
+            cameraFeed.style.display = 'none';
+            
+            recognizeFaceBtn.disabled = false;
+        });
+        
+        // Recognize face
+        recognizeFaceBtn.addEventListener('click', async () => {
+            if (!imageData) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please capture an image first',
+                    icon: 'error'
+                });
+                return;
+            }
+            
+            try {
+                recognizeFaceBtn.disabled = true;
+                recognizeFaceBtn.textContent = 'Processing...';
+                
+                const response = await fetch('/api/face-recognize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image: imageData
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Update the displayed image with annotations
+                    capturedImage.src = result.annotated_image;
+                    
+                    // Check if any faces were recognized
+                    const recognizedFaces = result.faces.filter(face => face.recognized);
+                    
+                    if (recognizedFaces.length > 0) {
+                        // Display user details for the first recognized face
+                        const face = recognizedFaces[0];
+                        userName.textContent = face.name || '-';
+                        userAge.textContent = face.age ? `${face.age} years` : '-';
+                        userContact.textContent = face.contact || '-';
+                        userRegistrationDate.textContent = face.registration_date ? new Date(face.registration_date).toLocaleDateString() : '-';
+                        userDetails.style.display = 'block';
+                        notRegistered.style.display = 'none';
+                        
+                        // Show success message
+                        Swal.fire({
+                            title: 'Face Recognized!',
+                            text: `Successfully identified: ${face.name}`,
+                            icon: 'success',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        // No recognized faces
+                        userDetails.style.display = 'none';
+                        notRegistered.style.display = 'block';
+                        
+                        Swal.fire({
+                            title: 'Face Not Recognized',
+                            text: 'This person is not registered in our database.',
+                            icon: 'info'
+                        });
+                    }
+                } else {
+                    // Error or no faces detected
+                    Swal.fire({
+                        title: 'Recognition Failed',
+                        text: result.error || 'No faces detected in the image',
+                        icon: 'error'
+                    });
+                    userDetails.style.display = 'none';
+                    notRegistered.style.display = 'block';
+                }
+            } catch (err) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to process image: ' + err.message,
+                    icon: 'error'
+                });
+            } finally {
+                recognizeFaceBtn.disabled = false;
+                recognizeFaceBtn.textContent = 'Recognize Face';
+            }
+        });
+        
+        // Clean up when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
 </html> 

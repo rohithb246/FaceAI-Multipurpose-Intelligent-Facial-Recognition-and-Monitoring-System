@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,4 +137,144 @@
         AOS.init({ duration: 800, once: true });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Face Analysis AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    <!-- Hero Section -->
+    <div class="section section-gradient" style="background-image: url('{{ url_for('static', filename='images/detection home.jpg') }}'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.7);"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container" style="position: relative; z-index: 2;">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">ABOUT US</div>
+                <h2 class="main-title">Revolutionizing Face Analysis</h2>
+                <p class="subtitle">Leading the future of AI-powered facial recognition and analysis technology</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Content -->
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="card" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 20px;">Our Mission</h3>
+                <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.8; margin-bottom: 20px;">
+                    At FaceAI, we are dedicated to advancing the field of artificial intelligence through innovative facial analysis technology. 
+                    Our mission is to provide accurate, reliable, and ethical AI solutions that enhance security, improve user experience, 
+                    and drive technological progress across various industries.
+                </p>
+                <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.8;">
+                    With cutting-edge machine learning algorithms and state-of-the-art computer vision technology, 
+                    we deliver exceptional results in age detection, gender recognition, emotion analysis, and face recognition. 
+                    Our commitment to privacy, security, and accuracy makes us the trusted choice for businesses and individuals worldwide.
+                </p>
+            </div>
+            
+            <!-- Values Section -->
+            <div class="grid grid-3" style="margin-top: 40px;">
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">🎯</div>
+                        <h3>Accuracy</h3>
+                        <p>Our AI models achieve 99.9% accuracy through continuous training and optimization on diverse datasets.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">🔒</div>
+                        <h3>Privacy</h3>
+                        <p>We prioritize data security and privacy, ensuring all processing is done with the highest ethical standards.</p>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">⚡</div>
+                        <h3>Speed</h3>
+                        <p>Real-time processing capabilities deliver instant results without compromising accuracy or quality.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technology Section -->
+            <div class="card" style="margin-top: 40px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 20px;">Our Technology</h3>
+                <div class="grid grid-2" style="gap: 30px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">Advanced AI Algorithms</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            We utilize deep learning neural networks trained on millions of facial data points to ensure 
+                            unparalleled accuracy in facial analysis tasks. Our models continuously learn and improve 
+                            to provide the best possible results.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">Computer Vision Excellence</h4>
+                        <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            Our computer vision technology can detect and analyze 68 facial landmarks with incredible precision, 
+                            enabling detailed facial feature analysis and emotion recognition across diverse demographics.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="text-center" style="margin-top: 60px;" data-aos="fade-up">
+                <h3 style="color: #00d4ff; margin-bottom: 20px;">Ready to Experience the Future?</h3>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">
+                    Join thousands of users who trust FaceAI for their facial analysis needs
+                </p>
+                <a href="{{ url_for('face_analysis') }}" class="btn btn-primary btn-large">
+                    Get Started Today
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
 </html> 

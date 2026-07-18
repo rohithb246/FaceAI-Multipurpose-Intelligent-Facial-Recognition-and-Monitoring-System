@@ -32,6 +32,7 @@ parser.add_argument('--image', help='Path to image or video file')
 args = parser.parse_args()
 
 # Load models
+<<<<<<< HEAD
 import os
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -44,6 +45,17 @@ genderModel = os.path.join(script_dir, "gender_net.caffemodel")
 
 MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
 ageList = ['(0-2)', '(4-6)', '(8-12)', '(15-20)', '(25-32)', '(38-43)', '(48-53)', '(60-100)']
+=======
+faceProto = "opencv_face_detector.pbtxt"
+faceModel = "opencv_face_detector_uint8.pb"
+ageProto = "age_deploy.prototxt"
+ageModel = "age_net.caffemodel"
+genderProto = "gender_deploy.prototxt"
+genderModel = "gender_net.caffemodel"
+
+MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+ageList = ['(0-2)', '(4-6)', '(8-12)', '(15-20)', '(20-25)', '(25-32)', '(38-43)', '(48-53)', '(60-100)']
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
 genderList = ['Male', 'Female']
 
 faceNet = cv2.dnn.readNet(faceModel, faceProto)

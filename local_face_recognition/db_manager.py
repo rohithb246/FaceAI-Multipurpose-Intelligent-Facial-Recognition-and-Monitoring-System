@@ -14,6 +14,7 @@ def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users (id)
                 )''')
+<<<<<<< HEAD
     # This table is read by get_all_people().  Creating it here (rather than
     # on the first registration) makes a clean installation usable before a
     # face has been enrolled.
@@ -25,6 +26,8 @@ def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users (id)
                 )''')
+=======
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
     conn.commit()
     conn.close()
 

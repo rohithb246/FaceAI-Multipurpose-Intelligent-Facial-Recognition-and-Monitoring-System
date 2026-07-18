@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,4 +165,172 @@
         AOS.init({ duration: 800, once: true });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - FaceAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+    {% include 'user-header.html' %}
+    
+    {% if user %}
+    <div class="user-welcome">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <h3>Welcome back, {{ user.full_name }}! 👋</h3>
+            <p>Manage your account and face recognition settings</p>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="section section-dark">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-down">
+                <div class="header-badge">DASHBOARD</div>
+                <h2 class="main-title">User Dashboard</h2>
+                <p class="subtitle">Manage your account settings and face recognition data</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <!-- User Information Card -->
+                <div class="card" data-aos="slide-up" data-aos-delay="100">
+                    <h3>Account Information</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Full Name:</span>
+                        <span class="detail-value">{{ user.full_name }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value">{{ user.email }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Account Type:</span>
+                        <span class="detail-value">{{ user.role.title() }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Member Since:</span>
+                        <span class="detail-value">
+                            {% if user.created_at %}
+                                {% if user.created_at is string %}
+                                    {{ user.created_at.split('T')[0] if 'T' in user.created_at else user.created_at }}
+                                {% else %}
+                                    {{ user.created_at.strftime('%B %d, %Y') }}
+                                {% endif %}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Face Recognition Status -->
+                <div class="card" data-aos="slide-up" data-aos-delay="200">
+                    <h3>Face Recognition Status</h3>
+                    {% if face_details %}
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+                        <p style="color: #00d4ff; font-weight: 600; margin-bottom: 10px;">Face Registered</p>
+                        <p style="color: rgba(255, 255, 255, 0.7);">Your face is registered for recognition</p>
+                    </div>
+                    {% else %}
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">❌</div>
+                        <p style="color: #ff3b30; font-weight: 600; margin-bottom: 10px;">No Face Registered</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">Register your face to use face recognition features</p>
+                        <a href="{{ url_for('user_face_registration_page') }}" class="btn btn-primary">
+                            Register Face
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="grid grid-3" style="margin-top: 40px;">
+                <div class="card" data-aos="slide-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">🎯</div>
+                        <h3>Face Analysis</h3>
+                        <p>Analyze age, gender, and emotions from images</p>
+                        <a href="{{ url_for('face_analysis') }}" class="btn btn-primary">
+                            Start Analysis
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="400">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">🔐</div>
+                        <h3>Face Recognition</h3>
+                        <p>Test face recognition with your registered face</p>
+                        <a href="{{ url_for('face_recognition_page') }}" class="btn btn-primary">
+                            Test Recognition
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card" data-aos="slide-up" data-aos-delay="500">
+                    <div class="text-center">
+                        <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">🚗</div>
+                        <h3>Driver Monitoring</h3>
+                        <p>Monitor driver safety and alertness</p>
+                        <a href="{{ url_for('driver_monitoring') }}" class="btn btn-primary">
+                            Start Monitoring
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Actions -->
+            <div class="card" style="margin-top: 40px;" data-aos="slide-up" data-aos-delay="600">
+                <h3>Account Actions</h3>
+                <div class="grid grid-2" style="gap: 20px;">
+                    <div>
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">Update Profile</h4>
+                        <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">Change your account information and settings</p>
+                        <a href="{{ url_for('edit_profile') }}" class="btn btn-secondary">Edit Profile</a>
+                    </div>
+                    <div>
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">Security</h4>
+                        <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">Change password and security settings</p>
+                        <a href="{{ url_for('security_settings') }}" class="btn btn-secondary">Security Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{{ url_for('face_analysis') }}">Home</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2025 FaceAI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AOS Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
 </html> 

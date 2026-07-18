@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 flask
 # OpenCV 5 removed Caffe DNN import support used by the bundled models.
 opencv-python<5
@@ -6,3 +7,12 @@ flask-mail
 flask-cors
 # Face recognition and driver monitoring use the included OpenCV compatibility
 # layers, so no dlib build is required.
+=======
+flask
+opencv-python
+numpy
+flask-mail
+deepface
+tensorflow
+scikit-learn 
+>>>>>>> a8a36cb1c8a89472d874daa0bf4ce03cfbef9114
